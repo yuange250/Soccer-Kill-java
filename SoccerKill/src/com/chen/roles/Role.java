@@ -2,13 +2,25 @@ package com.chen.roles;
 import java.util.Vector;
 
 import com.chen.cards.*;
+import com.chen.tools.Mapping;
 
 public class Role {
 	protected int maxLife;
 	protected int life=0;
 	protected Equipment[] equip;
 	protected Vector<Card> cards;
+	protected Vector<Mapping> cards_giveup;
+	private boolean judge_over=false;
 	protected String name;
+	protected int shoot_time;
+	public int getshoot_time()
+	{
+		return shoot_time;
+	}
+	public void setshoot_time(int time)
+	{
+		this.shoot_time=time;
+	}
 	public int getmaxlife()
 	{
 		return maxLife;
@@ -43,20 +55,42 @@ public class Role {
 	public Vector<Card>  getCards(){
 		return cards;
 	}
-	public void addCard()
+	public void addCard(Card card)
 	{
 		//add cards 
+		cards.add(card);
 	}
-	public void removeCard(){
-		
+	public void removeCard(Card card)
+	{
+	     for(int i=0;i<=cards.size();i++)
+		{
+			if(cards.get(i)==card)
+			{
+				cards.remove(i);
+				break;
+			}
+		}
 	}
 	public void usecard()
 	{
 		
 	}
-	public void beattack()
+	public Card beattack()
 	{
 		lifedrop(1);
+		return null;
+	}
+	public boolean judge_over()
+	{
+		return judge_over;
+	}
+	public void judge_over_off()
+	{
+		judge_over=false;
+	}
+	public void judge_over_on()
+	{
+		judge_over=true;
 	}
 }
 

@@ -8,12 +8,11 @@ public class Messi extends Role{
 	  cards=new Vector<Card>();
 	  Card card=new Card(2,"club","shoot");
 	  cards.add(card);
-	  card=new Card(3,"club","shoot");
-	  cards.add(card);
-	  card=new Card(2,"diamond","drive");
+	  card=new Card(3,"diamond","drive");
 	  cards.add(card);
 	  name="messi";
 	  life=2;
 	  maxLife=3;
+	  shoot_time=1;
   }
 }
