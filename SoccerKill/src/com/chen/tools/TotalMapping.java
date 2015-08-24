@@ -13,20 +13,29 @@ public class TotalMapping {
 	  private Vector<Mapping> map_middle=new Vector<Mapping>();
 	  private GameManager gm=new GameManager();
 	  private Role current_role=gm.nextRole();
+	  private int Card_giveup_num=0;
+	  public int getCard_giveupnum()
+	  {
+		  return Card_giveup_num;
+	  }
+	  public void setCard_giveupnum(int num)
+	  {
+		  Card_giveup_num=num;
+	  }
 	  public Role getCurrentUser(){
 		  return current_role;
 	  }
-	  public void addCardstoCurrentuser()
-	  {
+	 public void addCardstoCurrentuser()
+	 {
 		  gm.distributeCards(current_role);
 		  this.redistributeSpace();
 		  System.out.println(current_role.getCards().size());
-	  }
+	 }
 	  
-	  public void Map_middleassignment(Vector<Mapping> m)
-	  {
+	 public void Map_middleassignment(Vector<Mapping> m)
+	 {
 		  map_middle=m;
-	  }
+	 }
 	 public Vector<Mapping> getMap_role()
 	 {
 		 return map_role;
@@ -110,8 +119,13 @@ public class TotalMapping {
 			{
 				if(map_down.get(i).getY()==400)
 				{
+					Mapping m_temp=map_down.get(i);
 					Card temp=(Card)map_down.get(i).getobj();
 					current_role.removeCard(temp);
+					m_temp.setX(100+map_middle.size()*100);
+					m_temp.setY(200);
+					map_middle.add(m_temp);
+					
 				}
 			}
 			this.redistributeSpace();

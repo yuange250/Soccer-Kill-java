@@ -9,12 +9,6 @@ import com.chen.tools.Mapping;
 public class Robot extends Role{
 	public Card beattack()
 	{
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		for(int i=0;i<cards.size();i++)
 		{
 			if(cards.get(i).gettype().equals("drive"))
@@ -24,7 +18,6 @@ public class Robot extends Role{
 			      return temp;
 			}
 		}
-		
 		lifedrop(1);
 		return null;
 	}
