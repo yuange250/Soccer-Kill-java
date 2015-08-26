@@ -105,4 +105,8 @@ public class Robot extends Role{
 		}
 		return cards_giveup;
 	}
+	public Card ifSave()
+	{
+		return null;
+	}
 }

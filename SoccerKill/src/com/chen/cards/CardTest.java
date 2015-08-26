@@ -1,7 +1,5 @@
 package com.chen.cards;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
 
 public class CardTest {

@@ -30,6 +30,8 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	  TotalMapping tm=new TotalMapping(); //all the items in the panel mapping the items in the program was managed in this class
 	  Robot current_robot;
 	  int drive_mod=0;
+	  int diemod_out=0;
+	  boolean if_win=true;
 	  
      public Main_Panel(){//init the panel
    	  this.setSize(600,600);
@@ -125,9 +127,15 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
    	         break;
    	  case 5:g.drawString("out of your action", 0, 30);
    	         break;
-   	  case 6:g.drawString("put drive or not?", 0, 30);
+   	  case 6:if(diemod_out==0)
+   		     g.drawString("put drive or not?", 0, 30);
+   	         else if(diemod_out==1)
+   	         g.drawString("use a medi to save yourself?", 0, 30);
    	         break;
-   	  case 7:g.drawString("game over you win!", 0, 30);
+   	  case 7:if(if_win)
+   		     g.drawString("game over you win!", 0, 30);
+   	         else
+   	         g.drawString("game over you lose!", 0, 30);
    	         break;
    	  }
 	  }
@@ -259,8 +267,8 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          		    	 if(tm.getCurrentUser().getmaxlife()>tm.getCurrentUser().getlife())
 	          		    	 {
 	          		    	    b_sure.setEnabled(true);
-	          		    	    action_mod=3;
 	          		    	 }
+	          		    	 action_mod=3;
 	          		    	 b_cancel.setEnabled(true);
 	          		    	
 	          		}
@@ -327,7 +335,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
           		 }
 	        }
 		}
-		if(mod==6)
+		if(mod==6&&diemod_out!=1)
 		{
 			 if(drive_mod==0&&temp.getobj() instanceof Card)
 	          {//current role use a card
@@ -351,8 +359,35 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          		{
 	          		    	 temp.setY(450);
 	          		    	 b_sure.setEnabled(false);
-	          		    	 b_cancel.setEnabled(false);
 	          		    	 drive_mod=0;
+	          		}
+	          }
+		}
+		else if(mod==6&&diemod_out!=0)
+		{
+			 if(diemod_out==1&&temp.getobj() instanceof Card)
+	          {//current role use a card
+	          	    Card card_temp=(Card)temp.getobj();
+	          		System.out.println(card_temp.gettype());
+	          		if(card_temp.gettype().equals("medi")&&temp.getY()==450)
+	          		{
+	          		    	 temp.setY(400);
+	          		    	 b_sure.setEnabled(true);
+	          		    	 b_cancel.setEnabled(true);
+	          		    	 diemod_out=2; 
+	          		}
+	          		
+	          	}
+	          else if(drive_mod==2&&temp.getobj() instanceof Card)
+	          {
+	        	   Card card_temp=(Card)temp.getobj();
+	          	    System.out.println(card_temp.gettype());
+	          	    System.out.println(card_temp.gettype().equals("medi")&&temp.getY()==400);
+	          		if(card_temp.gettype().equals("medi")&&temp.getY()==400)
+	          		{
+	          		    	 temp.setY(450);
+	          		    	 b_sure.setEnabled(false);
+	          		    	 diemod_out=1; 
 	          		}
 	          }
 		}
@@ -432,7 +467,17 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 				current_robot=tm.getRobot();
 				tm.addCardstouser(current_robot);
 			}
-			if(mod==6)
+			else if(mod==6&&diemod_out==2)
+			{
+				tm.CardGiveUP();
+				diemod_out=0;
+				tm.getCurrentUser().liferise();
+				b_sure.setEnabled(false);
+				b_giveup.setEnabled(false);
+				b_cancel.setEnabled(false);
+				mod=5;
+			}
+			else if(mod==6&&diemod_out==0)
 			{
 				tm.CardGiveUP();
 				drive_mod=0;
@@ -473,16 +518,45 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 					else
 					{
 						 mod=7;
+						 if_win=true;
 					}
 				}
-				
+				else 
+				{
+					 System.out.println(tm.getMap_middle().size());
+				     b_sure.setEnabled(false);
+				     b_cancel.setEnabled(false);
+				     tm.redistributeSpace();
+					 action_mod=0;
+				}
+				action_mod=0;
 			}
-			else if(mod==6)
+			else if(mod==6&&diemod_out==0)
 			{
+				tm.redistributeSpace();
 				b_sure.setEnabled(false);
 				b_cancel.setEnabled(false);
 				tm.getCurrentUser().beattack();
+				if(tm.getCurrentUser().getlife()<=0)
+				{
+					if(current_robot.ifSave()!=null)
+					{
+						
+					}
+					else
+					{
+						diemod_out=1;
+					}
+					b_cancel.setEnabled(true);
+				}
+				else
 				mod=5;
+			}
+			else if(mod==6&&diemod_out!=0)
+			{
+				tm.redistributeSpace();
+				mod=7;
+				if_win=false;
 			}
 		}
 		repaint();
