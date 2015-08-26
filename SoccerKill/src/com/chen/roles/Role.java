@@ -40,7 +40,7 @@ public class Role {
 	}
 	public void liferise(){
 		//you can only add one life one time
-		life+=life;
+		life+=1;
 	}
 	public Equipment[] getEquip(){
 		return equip;

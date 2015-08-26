@@ -6,6 +6,7 @@ public class Mapping {
 	int height;
 	int width;
 	Object object;
+	int life=0;
 	public Mapping(int locX,int locY,int height,int width){
 		this.locX=locX;
 		this.locY=locY;

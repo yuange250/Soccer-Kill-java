@@ -33,7 +33,14 @@ public class Robot extends Role{
 		Role role_temp;
 		for(int i=0;i<this.cards.size();i++)
 		{
-			if(cards.get(i).gettype().equals("shoot")&&this.getshoot_time()!=0)
+			if(cards.get(i).gettype().equals("medi")&&this.getlife()<this.getmaxlife())
+			{
+				temp=cards.get(i);
+				cards.remove(i);
+				this.liferise();
+				break;
+			}
+			else if(cards.get(i).gettype().equals("shoot")&&this.getshoot_time()!=0)
 			{
 				temp=cards.get(i);
 				cards.remove(i);
@@ -55,6 +62,28 @@ public class Robot extends Role{
 		else
 		{
 			this.setshoot_time(1);
+		}
+		return temp;
+	}
+	public Card saveyourself()
+	{
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Card temp=null;
+		Role role_temp;
+		for(int i=0;i<this.cards.size();i++)
+		{
+			if(cards.get(i).gettype().equals("medi")&&this.getlife()<this.getmaxlife())
+			{
+				temp=cards.get(i);
+				cards.remove(i);
+				this.liferise();
+				break;
+			}
 		}
 		return temp;
 	}
