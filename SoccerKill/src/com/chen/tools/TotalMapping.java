@@ -8,27 +8,31 @@ import com.chen.roles.Messi;
 import com.chen.roles.Role;
 
 public class TotalMapping implements Runnable{
-//all the pictures mapping is managed in this class
-	  private Vector<Mapping> map_role=new Vector<Mapping>();
-	  private Vector<Mapping> map_down=new Vector<Mapping>();
-	  private Vector<Mapping> map_middle=new Vector<Mapping>();
-	  private GameManager gm=new GameManager();
+      //all the pictures mapping is managed in this class
+	  private Vector<Mapping> map_role=new Vector<Mapping>();//roles
+	  private Vector<Mapping> map_down=new Vector<Mapping>();//the player's cards
+	  private Vector<Mapping> map_middle=new Vector<Mapping>();//the cards which have being used
+	 
+	  private GameManager gm=new GameManager();//distribute cards
 	  private Role current_role=gm.nextRole();
-	  private int Card_giveup_num=0;
+	  private int cards_drop_num=0;
 	
 
-	  public void Card_num_clear()
+	  //this part is going to concentrate on mod 4 drop cards
+	  public void cards_drop_num_clear()
 	  {
-		  Card_giveup_num=0;
+		  cards_drop_num=0;
 	  }
-	  public int getCard_giveupnum()
+	  public int getcards_drop_num()
 	  {
-		  return Card_giveup_num;
+		  return cards_drop_num;
 	  }
-	  public void setCard_giveupnum(int num)
+	  public void setcards_drop_num(int num)
 	  {
-		  Card_giveup_num=num;
+		  cards_drop_num=num;
 	  }
+	  
+	  
 	  public Role getCurrentUser(){
 		  return current_role;
 	  }
@@ -36,14 +40,16 @@ public class TotalMapping implements Runnable{
 	  {
 		  return gm.nextRobot();
 	  }
+	  
 	  public void run()
 	  {//middle auto clean
+		 
 		  while(true)
 		  {
 		     for(int i=0;i<map_middle.size();)
 		     {
-		    	 map_middle.get(i).life++;
-		    	 if(map_middle.get(i).life==40)
+		    	 map_middle.get(i).lifeAdd();;
+		    	 if(map_middle.get(i).getLife()==40)
 		    	 {
 		    		 gm.collectoldcards((Card)map_middle.get(i).getobj());
 		    		 map_middle.remove(i);
@@ -60,6 +66,7 @@ public class TotalMapping implements Runnable{
 			    e.printStackTrace();
 		     }
 		  }
+		  
 	  }
 	 public void addCardstouser(Role role)
 	 {
@@ -67,11 +74,7 @@ public class TotalMapping implements Runnable{
 		  this.redistributeSpace();
 		  System.out.println(current_role.getCards().size());
 	 }
-	  
-	 public void Map_middleassignment(Vector<Mapping> m)
-	 {
-		  map_middle=m;
-	 }
+  
 	 public Vector<Mapping> getMap_role()
 	 {
 		 return map_role;
@@ -84,10 +87,8 @@ public class TotalMapping implements Runnable{
 	 {
 		 return map_middle;
 	 }
-	  public void map_middle_clear()
-	  {
-		  map_middle=new  Vector<Mapping>();
-	  }
+	 
+	 //give me a piont return the object which this piont points at
 	  public Mapping findTheObject(int x,int y){
 
 	  		for(int i=0;i<map_role.size();i++)
@@ -106,6 +107,7 @@ public class TotalMapping implements Runnable{
 	  		}
 	  		return null;
 	  	}
+	  //init the UI at first
 		public void InitSpace()
 	  	{
 	  		int i=0;
@@ -131,6 +133,7 @@ public class TotalMapping implements Runnable{
 	          	map_down.add(m);
 	          }
 	  	}
+		//redistribute the space of map_down
 		public void redistributeSpace()
 	  	{
 	  		int i=0;
@@ -149,7 +152,10 @@ public class TotalMapping implements Runnable{
 	  	        map_down.add(m);
 	  	     }
 	  	}
-		public void CardGiveUP()
+		
+		//dropCard
+		//drop the cards which have been selected out
+		public void cardDrop()
 		{
 			for(int i=0;i<map_down.size();i++)
 			{

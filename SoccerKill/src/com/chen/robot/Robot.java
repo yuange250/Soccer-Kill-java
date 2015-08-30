@@ -87,7 +87,7 @@ public class Robot extends Role{
 		}
 		return temp;
 	}
-	public Vector<Mapping> giveUP(){
+	public Vector<Mapping> end(){
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
