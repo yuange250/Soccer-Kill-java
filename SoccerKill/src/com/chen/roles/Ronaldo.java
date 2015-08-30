@@ -12,5 +12,6 @@ public class Ronaldo extends Robot{
 		  life=2;
 		  maxLife=3;
 		  shoot_time=1;
+		  attackdistance=1;
 	  }
 }

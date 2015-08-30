@@ -40,7 +40,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	  TotalMapping tm=new TotalMapping(); //all the items in the panel mapping the items in the program was managed in this class
    
 	public Main_Panel(){//init the panel
-   	  this.setSize(600,600);
+   	  this.setSize(800,700);
    	  this.setBackground(Color.orange);
    	  this.setLayout(null); 
    	  this.repaint();
@@ -55,11 +55,11 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
    	  this.add(b_sure);
    	  this.add(b_cancel);
    	  this.add(b_end);
-   	  b_sure.setBounds(390, 420, 60, 30);
+   	  b_sure.setBounds(590, 520, 60, 30);
    	  b_sure.setBorder(new EmptyBorder(0, 0, 0, 0));
-   	  b_cancel.setBounds(390,450,60, 30);
+   	  b_cancel.setBounds(590,550,60, 30);
    	  b_cancel.setBorder(new EmptyBorder(0, 0, 0, 0));
-   	  b_end.setBounds(390, 510, 60, 30);
+   	  b_end.setBounds(590, 610, 60, 30);
    	  b_end.setBorder(new EmptyBorder(0, 0, 0, 0));
    	  Font f=new Font("Arial",Font.BOLD,12);
    	  b_sure.setFont(f);
@@ -190,7 +190,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 					tm.getCurrentUser().setshoot_time(1);
 					tm.cards_drop_num_clear();
 					mod=5;
-					current_robot=tm.getRobot();
+					current_robot=(Robot)tm.getRobot(tm.getCurrentUser());
 					tm.addCardstouser(current_robot);
 				}
 				else
@@ -211,17 +211,32 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 				Card temp;
 				if((temp=current_robot.excute(tm.getMap_role()))!=null)
 				{
-					if(temp.gettype()=="shoot"&&temp.getaim().getobj()==tm.getCurrentUser())
+					if(temp.gettype()=="shoot")
 					{//the robot shoot someone
-						Mapping m=new Mapping(100+tm.getMap_middle().size()*100,200,150,100);
+						shoot_aim=(Role)temp.getaim().getobj();
+						if(shoot_aim==tm.getCurrentUser())
+						{
+						Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
 						m.setObj(temp);
 						tm.getMap_middle().add(m);
 						mod=6;
 						b_cancel.setEnabled(true);
+						}
+						else
+						{
+							Card card_temp;
+							Robot rb_temp=(Robot)shoot_aim;
+							if((card_temp=rb_temp.beattack())!=null)
+							{
+							       Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
+							       m.setObj(card_temp);
+							       tm.getMap_middle().add(m);
+							}
+						}
 					}
 					else
 					{//the role use a card that others can not disturb
-						Mapping m=new Mapping(100+tm.getMap_middle().size()*100,200,150,100);
+						Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
 						m.setObj(temp);
 						tm.getMap_middle().add(m);
 					}
@@ -233,7 +248,16 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 				    {
 				    	tm.getMap_middle().add(m.get(i));
 				    }
-					mod=0;
+				    Role nextrole ;
+					if((nextrole=tm.getRobot(current_robot))!=tm.getCurrentUser())
+					{
+						current_robot=(Robot)nextrole;
+						tm.addCardstouser(current_robot);
+					}
+					else
+					{
+						mod=0;
+					}
 				}
 			}
 			else if(mod==7)
@@ -262,16 +286,16 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          if(temp.getobj() instanceof Card&&action_mod==0)
 	          {//current role use a card
 	          	    Card card_temp=(Card)temp.getobj();
-	          		System.out.println(card_temp.gettype()+" "+(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==450));
-	          		if(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==450)
+	          		System.out.println(card_temp.gettype()+" "+(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==550));
+	          		if(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==550)
 	          		{//selected a shoot
-	          		    	 temp.setY(400);
+	          		    	 temp.setY(500);
 	          		    	 b_cancel.setEnabled(true);
 	          		    	 action_mod=1;
 	          		}
-	          		else if(card_temp.gettype().equals("medi")&&temp.getY()==450)
+	          		else if(card_temp.gettype().equals("medi")&&temp.getY()==550)
 	          		{//select a medi
-	          		    	 temp.setY(400);
+	          		    	 temp.setY(500);
 	          		    	 if(tm.getCurrentUser().getmaxlife()>tm.getCurrentUser().getlife())
 	          		    	 {
 	          		    	    b_sure.setEnabled(true);
@@ -285,9 +309,9 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          {
 	        	   Card card_temp=(Card)temp.getobj();
 	          	    System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==400)
+	          		if(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==500)
 	          		{//unselect a shoot
-	          		    	 temp.setY(450);
+	          		    	 temp.setY(550);
 	          		    	 b_cancel.setEnabled(false);
 	          		         action_mod=0;
 	          		}
@@ -296,9 +320,9 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          {//unslelect a medi
 	        	   Card card_temp=(Card)temp.getobj();
 	          	    System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==400)
+	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
 	          		{
-	          		    	 temp.setY(450);
+	          		    	 temp.setY(550);
 	          		    	 b_cancel.setEnabled(false);
 	          		         action_mod=0;
 	          		}
@@ -307,20 +331,26 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          {//if save someone
 	        	   Card card_temp=(Card)temp.getobj();
 	          	    System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==400)
+	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
 	          		{
-	          		    	 temp.setY(450);
+	          		    	 temp.setY(550);
 	          		}
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==450)
+	          		if(card_temp.gettype().equals("medi")&&temp.getY()==550)
 	          		{
-	          		    	 temp.setY(400);
+	          		    	 temp.setY(500);
 	          		    	 b_sure.setEnabled(true);
 	          		}
 	          }
 	          else if(action_mod==1&&temp.getobj() instanceof Role)
 	          {//select a shoot and select a role
 	        	  shoot_aim=(Role)temp.getobj();
-	        	  b_sure.setEnabled(true);
+	        	  int distance=shoot_aim.getId()-tm.getCurrentUser().getId();
+	        	  if(distance>=3)
+	        		  distance=5-distance;
+	        	  if(distance<=tm.getCurrentUser().getattackdistance()&&shoot_aim!=tm.getCurrentUser())
+	        	    b_sure.setEnabled(true);
+	        	  else
+	        		shoot_aim=null;
 	          }
         }
 		if(mod==4)
@@ -329,15 +359,15 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	        {
 	          	 Card card_temp=(Card)temp.getobj();
 	             System.out.println(card_temp.gettype());
-	          	 if(temp.getY()==450&&tm.getcards_drop_num()!=(tm.getCurrentUser().getCards().size()-tm.getCurrentUser().getlife()))
+	          	 if(temp.getY()==550&&tm.getcards_drop_num()!=(tm.getCurrentUser().getCards().size()-tm.getCurrentUser().getlife()))
 	          	 {
-	          		  temp.setY(400);
+	          		  temp.setY(500);
 	          		  b_cancel.setEnabled(true);
 	          		  tm.setcards_drop_num(tm.getcards_drop_num()+1);
 	          	 }
-	          	 else if(temp.getY()==400)
+	          	 else if(temp.getY()==500)
           		 {
-          		      temp.setY(450);
+          		      temp.setY(550);
           		      b_cancel.setEnabled(false);
           		      tm.setcards_drop_num(tm.getcards_drop_num()-1);
           		 }
@@ -349,9 +379,9 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          {//current role use a card
 	          	    Card card_temp=(Card)temp.getobj();
 	          		System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("drive")&&temp.getY()==450)
+	          		if(card_temp.gettype().equals("drive")&&temp.getY()==550)
 	          		{
-	          		    	 temp.setY(400);
+	          		    	 temp.setY(500);
 	          		    	 b_sure.setEnabled(true);
 	          		    	 b_cancel.setEnabled(true);
 	          		    	 drive_mod=1;
@@ -362,10 +392,10 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          {
 	        	   Card card_temp=(Card)temp.getobj();
 	          	    System.out.println(card_temp.gettype());
-	          	    System.out.println(card_temp.gettype().equals("drive")&&temp.getY()==400);
-	          		if(card_temp.gettype().equals("drive")&&temp.getY()==400)
+	          	    System.out.println(card_temp.gettype().equals("drive")&&temp.getY()==500);
+	          		if(card_temp.gettype().equals("drive")&&temp.getY()==500)
 	          		{
-	          		    	 temp.setY(450);
+	          		    	 temp.setY(550);
 	          		    	 b_sure.setEnabled(false);
 	          		    	 drive_mod=0;
 	          		}
@@ -377,9 +407,9 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          {//current role use a card
 	          	    Card card_temp=(Card)temp.getobj();
 	          		System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==450)
+	          		if(card_temp.gettype().equals("medi")&&temp.getY()==550)
 	          		{
-	          		    	 temp.setY(400);
+	          		    	 temp.setY(500);
 	          		    	 b_sure.setEnabled(true);
 	          		    	 b_cancel.setEnabled(true);
 	          		    	ifsave_mod=2; 
@@ -390,10 +420,10 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	          {
 	        	   Card card_temp=(Card)temp.getobj();
 	          	    System.out.println(card_temp.gettype());
-	          	    System.out.println(card_temp.gettype().equals("medi")&&temp.getY()==400);
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==400)
+	          	    System.out.println(card_temp.gettype().equals("medi")&&temp.getY()==500);
+	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
 	          		{
-	          		    	 temp.setY(450);
+	          		    	 temp.setY(550);
 	          		    	 b_sure.setEnabled(false);
 	          		    	ifsave_mod=1; 
 	          		}
@@ -434,7 +464,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 				Card temp;
 				if((temp=rb_temp.beattack())!=null)
 				{
-				       Mapping m=new Mapping(100+tm.getMap_middle().size()*100,200,150,100);
+				       Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
 				       m.setObj(temp);
 				       tm.getMap_middle().add(m);
 				       System.out.println(tm.getMap_middle().size());
@@ -472,8 +502,9 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 				tm.getCurrentUser().setshoot_time(1);
 				tm.cards_drop_num_clear();;
 				mod=5;
-				current_robot=tm.getRobot();
+				current_robot=(Robot)tm.getRobot(tm.getCurrentUser());
 				tm.addCardstouser(current_robot);
+			    action_mod=0;
 			}
 			else if(mod==6&&ifsave_mod==2)
 			{//being nearly killed and use a medi
@@ -499,7 +530,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 		{
 			 for(int i=0;i<tm.getMap_down().size();i++)
              {
-            	 if(tm.getMap_down().get(i).getY()==400)
+            	 if(tm.getMap_down().get(i).getY()==500)
             		 tm.setcards_drop_num(tm.getcards_drop_num()+1);
              }
 			mod=4;
@@ -514,7 +545,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 					Card card_temp=(Card)temp.saveyourself();
 					if(card_temp!=null)
 					{
-						   Mapping m=new Mapping(100+tm.getMap_middle().size()*100,200,150,100);
+						   Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
 					       m.setObj(card_temp);
 					       tm.getMap_middle().add(m);
 					       System.out.println(tm.getMap_middle().size());

@@ -30,7 +30,8 @@ public class Robot extends Role{
 			e.printStackTrace();
 		}
 		Card temp=null;
-		Role role_temp;
+		Role role_temp = null;
+		Mapping temp_map=null;
 		for(int i=0;i<this.cards.size();i++)
 		{
 			if(cards.get(i).gettype().equals("medi")&&this.getlife()<this.getmaxlife())
@@ -42,22 +43,38 @@ public class Robot extends Role{
 			}
 			else if(cards.get(i).gettype().equals("shoot")&&this.getshoot_time()!=0)
 			{
-				temp=cards.get(i);
-				cards.remove(i);
-				this.shoot_time--;
+				for(int j=0;j<map_role.size();j++)
+				{
+					role_temp=(Role)map_role.get(j).getobj();
+					if(!role_temp.getname().equals(this.name))
+					{
+						 int distance=this.getId()-role_temp.getId();
+						 if(distance<0)
+							 distance=-distance;
+			        	  if(distance>=3)
+			        		  distance=5-distance;
+			        	  if(distance<=this.getattackdistance())
+			        	  {
+			        		  temp_map=map_role.get(j);
+			        		  break;
+			        	  }
+			        	  else
+			        		 role_temp =null;
+					}
+				}
+				if(role_temp!=null)
+				{
+				   temp=cards.get(i);
+				   cards.remove(i);
+				   this.shoot_time--;
+				   temp.setaim(temp_map);
+				}
 				break;
 			}
 		}
 		if(temp!=null)
 		{
-			for(int i=0;i<map_role.size();i++)
-			{
-				role_temp=(Role)map_role.get(i).getobj();
-				if(!role_temp.getname().equals(this.name))
-				{
-					temp.setaim(map_role.get(i));
-				}
-			}
+			
 		}
 		else
 		{
@@ -96,9 +113,9 @@ public class Robot extends Role{
 		}
 		int num=this.getCards().size()-this.getlife();
 		cards_giveup=new Vector<Mapping>();
-		for(int i=0,length=200;i<num;i++,length+=100)
+		for(int i=0,length=150;i<num;i++,length+=100)
 		{
-			Mapping m=new Mapping(length,200,150,100);
+			Mapping m=new Mapping(length,250,150,100);
 			m.setObj(this.getCards().get(0));
 			cards_giveup.add(m);
 			this.getCards().remove(0);

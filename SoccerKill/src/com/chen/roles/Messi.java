@@ -10,5 +10,6 @@ public class Messi extends Role{
 	  life=2;
 	  maxLife=3;
 	  shoot_time=1;
+	  attackdistance=1;
   }
 }

@@ -10,7 +10,7 @@ import com.chen.roles.Ronaldo;
 
 public class GameManager {
 	//Overview: response for the schedule of the game and distributing cards to roles
-	Role []roles=new Role[2];
+	Role []roles=new Role[5];
 	Card []allcards=new Card[100];
 	Card []dropcards=new Card[100];
 	private int dropcardsnum=1;
@@ -18,10 +18,21 @@ public class GameManager {
 	private int pointer=0;
 	private int cardpointer=1;
 	public GameManager(){
-		Ronaldo ronaldo=new Ronaldo();
+		Ronaldo ronaldo1=new Ronaldo();
+		Ronaldo ronaldo2=new Ronaldo();
+		Ronaldo ronaldo3=new Ronaldo();
+		Ronaldo ronaldo4=new Ronaldo();
 		Messi messi=new Messi();
-		roles[0]=ronaldo;
-		roles[1]=messi;
+		roles[0]=messi;
+		roles[0].SetId(0);
+		roles[1]=ronaldo1;
+		roles[1].SetId(1);
+		roles[2]=ronaldo2;
+		roles[2].SetId(2);
+		roles[3]=ronaldo3;
+		roles[3].SetId(3);
+		roles[4]=ronaldo4;
+		roles[4].SetId(4);
 		for(int i=2;i<=9;i++)
 		{
 	    Card card=new Card(i,"diamond","drive");
@@ -56,21 +67,15 @@ public class GameManager {
 		}
 		washCards();
 	}
-	public Role nextRole(){
-		if(pointer<roles.length-1)
-		{
-			pointer++;
-			return roles[pointer];
-		}
-		else
-		{
-			pointer=0;
-			return roles[pointer];
-		}
-	}
-	public Robot nextRobot()
+	public Role getCurrentRole()
 	{
-		return (Robot)roles[0];
+		return roles[0];
+	}
+	public Role nextRole(Role role){
+		if((role.getId()+1)!=5)
+		return roles[role.getId()+1];
+		else
+		return roles[0];
 	}
 	public void washCards()
 	{

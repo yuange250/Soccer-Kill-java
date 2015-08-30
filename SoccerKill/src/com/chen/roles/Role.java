@@ -13,6 +13,20 @@ public class Role {
 	private boolean judge_over=false;
 	protected String name;
 	protected int shoot_time;
+	private int Id;
+	protected int attackdistance;
+	public int getattackdistance()
+	{
+		return attackdistance;
+	}
+	public void SetId(int id)
+	{
+		Id=id;
+	}
+	public int getId()
+	{
+		return Id;
+	}
 	public int getshoot_time()
 	{
 		return shoot_time;

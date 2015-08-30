@@ -14,7 +14,7 @@ public class TotalMapping implements Runnable{
 	  private Vector<Mapping> map_middle=new Vector<Mapping>();//the cards which have being used
 	 
 	  private GameManager gm=new GameManager();//distribute cards
-	  private Role current_role=gm.nextRole();
+	  private Role current_role=gm.getCurrentRole();
 	  private int cards_drop_num=0;
 	
 
@@ -36,9 +36,9 @@ public class TotalMapping implements Runnable{
 	  public Role getCurrentUser(){
 		  return current_role;
 	  }
-	  public Robot getRobot()
+	  public Role getRobot(Role role)
 	  {
-		  return gm.nextRobot();
+		  return gm.nextRole(role);
 	  }
 	  
 	  public void run()
@@ -116,20 +116,37 @@ public class TotalMapping implements Runnable{
 	  		int height=0;
 	  		int width=0;
 	  		map_down=new Vector<Mapping>();
-	  		Mapping m=new Mapping(450,400,200,150);
-	  		Role role_temp=gm.nextRole();
-	  		m.setObj(gm.nextRole());
+	  		Mapping m=new Mapping(650,500,200,150);
+	  		m.setObj(current_role);
 	  		map_role.add(m);
-	  	    m=new Mapping(225,0,200,150);
-	  		m.setObj(gm.nextRole());
+	  		
+	  		m=new Mapping(650,250,200,150);
+	  		Role role1=gm.nextRole(current_role);
+	  		m.setObj(role1);
 	  		map_role.add(m);
-	  		locY=450;
+	  		
+	  		m=new Mapping(450,0,200,150);
+	  		Role role2=gm.nextRole(role1);
+	  		m.setObj(role2);
+	  		map_role.add(m);
+	  		
+	  		m=new Mapping(200,0,200,150);
+	  		Role role3=gm.nextRole(role2);
+	  		m.setObj(role3);
+	  		map_role.add(m);
+	  		
+	  		m=new Mapping(0,250,200,150);
+	  		Role role4=gm.nextRole(role3);
+	  		m.setObj(role4);
+	  		map_role.add(m);
+	  		
+	  		locY=550;
 	  		height=150;
 	  		width=100;
-	          for(;i<role_temp.getCards().size();i++,locX+=100)
+	          for(;i<current_role.getCards().size();i++,locX+=100)
 	          {
 	          	m=new Mapping(locX,locY,height,width);
-	          	m.setObj(role_temp.getCards().get(i));
+	          	m.setObj(current_role.getCards().get(i));
 	          	map_down.add(m);
 	          }
 	  	}
@@ -138,7 +155,7 @@ public class TotalMapping implements Runnable{
 	  	{
 	  		int i=0;
 	  		int locX=0;
-	  		int locY=450;
+	  		int locY=550;
 	  		int height=0;
 	  		int width=0;
 	  		height=150;
@@ -159,15 +176,14 @@ public class TotalMapping implements Runnable{
 		{
 			for(int i=0;i<map_down.size();i++)
 			{
-				if(map_down.get(i).getY()==400)
+				if(map_down.get(i).getY()==500)
 				{
 					Mapping m_temp=map_down.get(i);
 					Card temp=(Card)map_down.get(i).getobj();
 					current_role.removeCard(temp);
-					m_temp.setX(100+map_middle.size()*100);
-					m_temp.setY(200);
+					m_temp.setX(150+map_middle.size()*100);
+					m_temp.setY(250);
 					map_middle.add(m_temp);
-					
 				}
 			}
 			this.redistributeSpace();
