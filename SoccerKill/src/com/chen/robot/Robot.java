@@ -46,30 +46,35 @@ public class Robot extends Role{
 				for(int j=0;j<map_role.size();j++)
 				{
 					role_temp=(Role)map_role.get(j).getobj();
-					if(!role_temp.getname().equals(this.name))
+					if(role_temp.getId()!=this.getId())
 					{
 						 int distance=this.getId()-role_temp.getId();
 						 if(distance<0)
 							 distance=-distance;
 			        	  if(distance>=3)
 			        		  distance=5-distance;
+			        	  
 			        	  if(distance<=this.getattackdistance())
 			        	  {
+			        		  System.out.println("distance:"+distance+" "+this.getattackdistance());
 			        		  temp_map=map_role.get(j);
 			        		  break;
 			        	  }
 			        	  else
-			        		 role_temp =null;
-					}
+			        	  {
+			        		 temp_map =null;
+                             continue;
+						}
+				   }
 				}
-				if(role_temp!=null)
+				if(temp_map!=null)
 				{
 				   temp=cards.get(i);
 				   cards.remove(i);
 				   this.shoot_time--;
 				   temp.setaim(temp_map);
+				   break;
 				}
-				break;
 			}
 		}
 		if(temp!=null)

@@ -87,7 +87,17 @@ public class TotalMapping implements Runnable{
 	 {
 		 return map_middle;
 	 }
-	 
+	 public Mapping getRoleMap(Role role)
+	 {
+		 for(int i=0;i<map_role.size();i++)
+		 {
+			 if(role==map_role.get(i).getobj())
+			 {
+				 return (Mapping)map_role.get(i);
+			 }
+		 }
+		 return null;
+	 }
 	 //give me a piont return the object which this piont points at
 	  public Mapping findTheObject(int x,int y){
 

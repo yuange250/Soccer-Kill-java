@@ -33,6 +33,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	  int drive_mod=0;//out of the player's action,someone attack the player if he would use a drive to avoid 
 	  int ifsave_mod=0;//out of the player's action,the player is gong to die,if he will save himself
 	  boolean if_win=true;
+	  int point_line=0;//one use a card and one is the victim of the card,0 for no line 1 for player to robots,2 for robot to robot  
 	  
 	  //others
 	  Role shoot_aim;//the aim player to shoot
@@ -119,6 +120,11 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 			  Image image=getToolkit().getImage(filename);
 	    	  g.drawImage(image, map_middle.get(i).getX(),map_middle.get(i).getY(),map_middle.get(i).getWidth(),map_middle.get(i).getHeight(),this);
    	  }
+   	  if(current_robot!=null)
+   	  {
+   	     Mapping m_temp=tm.getRoleMap(current_robot);
+   	     g.drawString("current role", m_temp.getX(), m_temp.getY()+200);
+   	  }
    	  switch(mod)
    	  {//paint instructions
    	  case 1:g.drawString("judge stage", 0, 30);
@@ -147,7 +153,15 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
    	         g.drawString("game over you lose!", 0, 30);
    	         break;
    	  }
-	  }
+   	  switch(point_line)
+   	  {
+   	  case 0:break;
+   	  case 1:g.drawLine(tm.getRoleMap(tm.getCurrentUser()).getX()+75, tm.getRoleMap(tm.getCurrentUser()).getY()+100, tm.getRoleMap(shoot_aim).getX()+75, tm.getRoleMap(shoot_aim).getY()+100);
+   	         break;
+   	  case 2:g.drawLine(tm.getRoleMap(current_robot).getX()+75, tm.getRoleMap(current_robot).getY()+100, tm.getRoleMap(shoot_aim).getX()+75, tm.getRoleMap(shoot_aim).getY()+100);
+   	         break;
+   	  }
+	}
 	public void run()
 	{//thread function
 		
@@ -214,6 +228,8 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 					if(temp.gettype()=="shoot")
 					{//the robot shoot someone
 						shoot_aim=(Role)temp.getaim().getobj();
+						point_line=2;
+						repaint();
 						if(shoot_aim==tm.getCurrentUser())
 						{
 						Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
@@ -224,14 +240,25 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 						}
 						else
 						{
+							Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
+							m.setObj(temp);
+							tm.getMap_middle().add(m);
 							Card card_temp;
 							Robot rb_temp=(Robot)shoot_aim;
+							try {
+								Thread.sleep(500);
+							} catch (InterruptedException e) {
+								// TODO 自动生成的 catch 块
+								e.printStackTrace();
+							}
 							if((card_temp=rb_temp.beattack())!=null)
 							{
-							       Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
+							       m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
 							       m.setObj(card_temp);
 							       tm.getMap_middle().add(m);
 							}
+							
+							point_line=0;
 						}
 					}
 					else
@@ -256,6 +283,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 					}
 					else
 					{
+						current_robot=null;
 						mod=0;
 					}
 				}
@@ -348,7 +376,10 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	        	  if(distance>=3)
 	        		  distance=5-distance;
 	        	  if(distance<=tm.getCurrentUser().getattackdistance()&&shoot_aim!=tm.getCurrentUser())
-	        	    b_sure.setEnabled(true);
+	        	  {
+	        		  b_sure.setEnabled(true);
+	        		  point_line=1;
+	        	  }
 	        	  else
 	        		shoot_aim=null;
 	          }
@@ -459,6 +490,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 			if(mod==3&&action_mod==1)
 			{//shoot aim
 				action_mod=0;
+				point_line=0;
 				tm.cardDrop();
 				Robot rb_temp=(Robot)shoot_aim;
 				Card temp;
@@ -478,7 +510,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 				tm.getCurrentUser().setshoot_time(0);
 			}
 			else if(mod==3&&action_mod==3)
-			{//being shoot
+			{//use a medi
 				action_mod=0;
 				tm.cardDrop();
 				tm.getCurrentUser().liferise();
@@ -500,7 +532,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 				b_end.setEnabled(false);
 				b_cancel.setEnabled(false);
 				tm.getCurrentUser().setshoot_time(1);
-				tm.cards_drop_num_clear();;
+				tm.cards_drop_num_clear();
 				mod=5;
 				current_robot=(Robot)tm.getRobot(tm.getCurrentUser());
 				tm.addCardstouser(current_robot);
@@ -519,6 +551,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 			else if(mod==6&&ifsave_mod==0)
 			{//use a drive
 				tm.cardDrop();
+				point_line=0;
 				drive_mod=0;
 				b_sure.setEnabled(false);
 				b_end.setEnabled(false);
@@ -597,6 +630,7 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 				mod=7;
 				if_win=false;
 			}
+			point_line=0;
 		}
 		repaint();
 	}
