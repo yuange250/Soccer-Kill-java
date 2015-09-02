@@ -3,23 +3,27 @@ I change the roles in the game to some famous player,and the rules of this game 
 
 programming daily:
 8-24:
-1.���������ƻ��ƣ�ʹ��totalmapping�����Զ��������ơ�
-2.ʵ����˫��֮��Ķ�ս��
-3.������cancel��ť�Ĺ���
-4.���Ƴ���ϵͳ
-5.����Robot���Զ����ҹ���
-6.����ɱ�����ֹ����Լ��Ƿ�Ȼ��ж�
-7.�޸������ƣ������ļ���bug
+1.完善了弃牌机制，使用totalmapping对象自动清理弃牌。
+2.实现了双人之间的对战。
+3.完善了cancel按钮的功能
+4.完善吃桃系统
+5.完善Robot的自动吃桃功能
+6.增加杀死对手功能以及是否救活判断
+7.修复了弃牌，出闪的几个bug
 
-8-25��
-1.ʵ���˱�����ɱ����Ȼ���Ƿ��Ԯ��һ��ϵͳ
-2.ȫ��ʵ�����˶�ս��ɱ������
+8-25：
+1.实现了被别人杀死，然后是否救援这一个系统
+2.全面实现两人对战，杀桃闪。
 
 8-30:
-1.ȫ��ʵ�������˻�ɱ.
-2.����һ��robotɱrobot��bug.`
+1.全面实现了五人互杀.
+2.遗留一个robot杀robot的bug.`
 
-8-31��
-1.�޸���������bug
-2.ʵ���˻�ɱʱ˫����ָ����
-3.��һ���ƻ���ѯ������ϵͳ���Լ�����ʤ��ϵͳ�� 
+8-31：
+1.修复了昨晚的bug
+2.实现了互杀时双方的指引线
+3.下一步计划：询问求桃系统，以及身份胜利系统。 
+
+9-2:
+1.将MainPanel的各种功能分离出来
+2.
