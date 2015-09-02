@@ -20,7 +20,7 @@ import com.chen.roles.Role;
 import com.chen.tools.Mapping;
 import com.chen.tools.TotalMapping;
 
-public class Main_Panel extends JPanel implements MouseListener,ActionListener,Runnable{
+public class Main_Panel extends JPanel implements Runnable{
 	  //Jbutton part 
 	  JButton b_sure=new JButton("sure");
 	  JButton b_cancel=new JButton("cancel");
@@ -40,13 +40,15 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 	  Robot current_robot;//mod 5 robot's action
 	  TotalMapping tm=new TotalMapping(); //all the items in the panel mapping the items in the program was managed in this class
    
+	  MouseListener_panel mp=new MouseListener_panel(this);
+	  ActionListener_panel ap=new ActionListener_panel(this);
 	public Main_Panel(){//init the panel
    	  this.setSize(800,700);
    	  this.setBackground(Color.orange);
    	  this.setLayout(null); 
    	  this.repaint();
    	  Graphics g = null;
-   	  this.addMouseListener(this);
+   	  this.addMouseListener(mp);
    	  tm.InitSpace();
    	  b_sure.setLayout(null);
    	  b_cancel.setLayout(null);
@@ -69,9 +71,9 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
    	  b_sure.setEnabled(false);
    	  b_cancel.setEnabled(false);
    	  b_end.setEnabled(false);
-   	  b_sure.addActionListener(this);
-   	  b_cancel.addActionListener(this);
-   	  b_end.addActionListener(this);
+   	  b_sure.addActionListener(ap);
+   	  b_cancel.addActionListener(ap);
+   	  b_end.addActionListener(ap);
    	  Thread t=new Thread(tm);//the auto clean is start,map_middle is autoclean
   	  t.start();
    }
@@ -301,337 +303,5 @@ public class Main_Panel extends JPanel implements MouseListener,ActionListener,R
 			}
 			this.repaint();
 	    }
-	}
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		int x=e.getX();
-		int y=e.getY();
-		Mapping temp=tm.findTheObject(x,y);
-	  if(temp!=null)
-	  {
-		if(mod==3)
-		{
-	          if(temp.getobj() instanceof Card&&action_mod==0)
-	          {//current role use a card
-	          	    Card card_temp=(Card)temp.getobj();
-	          		System.out.println(card_temp.gettype()+" "+(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==550));
-	          		if(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==550)
-	          		{//selected a shoot
-	          		    	 temp.setY(500);
-	          		    	 b_cancel.setEnabled(true);
-	          		    	 action_mod=1;
-	          		}
-	          		else if(card_temp.gettype().equals("medi")&&temp.getY()==550)
-	          		{//select a medi
-	          		    	 temp.setY(500);
-	          		    	 if(tm.getCurrentUser().getmaxlife()>tm.getCurrentUser().getlife())
-	          		    	 {
-	          		    	    b_sure.setEnabled(true);
-	          		    	 }
-	          		    	 action_mod=3;
-	          		    	 b_cancel.setEnabled(true);
-	          		    	
-	          		}
-	          	}
-	          else if(action_mod==1&&temp.getobj() instanceof Card)
-	          {
-	        	   Card card_temp=(Card)temp.getobj();
-	          	    System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("shoot")&&tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==500)
-	          		{//unselect a shoot
-	          		    	 temp.setY(550);
-	          		    	 b_cancel.setEnabled(false);
-	          		         action_mod=0;
-	          		}
-	          }
-	          else if(action_mod==3&&temp.getobj() instanceof Card)
-	          {//unslelect a medi
-	        	   Card card_temp=(Card)temp.getobj();
-	          	    System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
-	          		{
-	          		    	 temp.setY(550);
-	          		    	 b_cancel.setEnabled(false);
-	          		         action_mod=0;
-	          		}
-	          }
-	          else if(action_mod==4&&temp.getobj() instanceof Card)
-	          {//if save someone
-	        	   Card card_temp=(Card)temp.getobj();
-	          	    System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
-	          		{
-	          		    	 temp.setY(550);
-	          		}
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==550)
-	          		{
-	          		    	 temp.setY(500);
-	          		    	 b_sure.setEnabled(true);
-	          		}
-	          }
-	          else if(action_mod==1&&temp.getobj() instanceof Role)
-	          {//select a shoot and select a role
-	        	  shoot_aim=(Role)temp.getobj();
-	        	  int distance=shoot_aim.getId()-tm.getCurrentUser().getId();
-	        	  if(distance>=3)
-	        		  distance=5-distance;
-	        	  if(distance<=tm.getCurrentUser().getattackdistance()&&shoot_aim!=tm.getCurrentUser())
-	        	  {
-	        		  b_sure.setEnabled(true);
-	        		  point_line=1;
-	        	  }
-	        	  else
-	        		shoot_aim=null;
-	          }
-        }
-		if(mod==4)
-		{
-			if(temp.getobj() instanceof Card)
-	        {
-	          	 Card card_temp=(Card)temp.getobj();
-	             System.out.println(card_temp.gettype());
-	          	 if(temp.getY()==550&&tm.getcards_drop_num()!=(tm.getCurrentUser().getCards().size()-tm.getCurrentUser().getlife()))
-	          	 {
-	          		  temp.setY(500);
-	          		  b_cancel.setEnabled(true);
-	          		  tm.setcards_drop_num(tm.getcards_drop_num()+1);
-	          	 }
-	          	 else if(temp.getY()==500)
-          		 {
-          		      temp.setY(550);
-          		      b_cancel.setEnabled(false);
-          		      tm.setcards_drop_num(tm.getcards_drop_num()-1);
-          		 }
-	        }
-		}
-		if(mod==6&&ifsave_mod!=1)
-		{
-			 if(drive_mod==0&&temp.getobj() instanceof Card)
-	          {//current role use a card
-	          	    Card card_temp=(Card)temp.getobj();
-	          		System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("drive")&&temp.getY()==550)
-	          		{
-	          		    	 temp.setY(500);
-	          		    	 b_sure.setEnabled(true);
-	          		    	 b_cancel.setEnabled(true);
-	          		    	 drive_mod=1;
-	          		}
-	          		
-	          	}
-	          else if(temp.getobj() instanceof Card)
-	          {
-	        	   Card card_temp=(Card)temp.getobj();
-	          	    System.out.println(card_temp.gettype());
-	          	    System.out.println(card_temp.gettype().equals("drive")&&temp.getY()==500);
-	          		if(card_temp.gettype().equals("drive")&&temp.getY()==500)
-	          		{
-	          		    	 temp.setY(550);
-	          		    	 b_sure.setEnabled(false);
-	          		    	 drive_mod=0;
-	          		}
-	          }
-		}
-		else if(mod==6&&ifsave_mod!=0)
-		{
-			 if(ifsave_mod==1&&temp.getobj() instanceof Card)
-	          {//current role use a card
-	          	    Card card_temp=(Card)temp.getobj();
-	          		System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==550)
-	          		{
-	          		    	 temp.setY(500);
-	          		    	 b_sure.setEnabled(true);
-	          		    	 b_cancel.setEnabled(true);
-	          		    	ifsave_mod=2; 
-	          		}
-	          		
-	          	}
-	          else if(drive_mod==2&&temp.getobj() instanceof Card)
-	          {
-	        	   Card card_temp=(Card)temp.getobj();
-	          	    System.out.println(card_temp.gettype());
-	          	    System.out.println(card_temp.gettype().equals("medi")&&temp.getY()==500);
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
-	          		{
-	          		    	 temp.setY(550);
-	          		    	 b_sure.setEnabled(false);
-	          		    	ifsave_mod=1; 
-	          		}
-	          }
-		}
-		repaint();
-	 }
-	}
-
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void actionPerformed(ActionEvent e) {
-		// shoot_aim
-		if(e.getSource()==b_sure)
-		{
-			if(mod==3&&action_mod==1)
-			{//shoot aim
-				action_mod=0;
-				point_line=0;
-				tm.cardDrop();
-				Robot rb_temp=(Robot)shoot_aim;
-				Card temp;
-				if((temp=rb_temp.beattack())!=null)
-				{
-				       Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
-				       m.setObj(temp);
-				       tm.getMap_middle().add(m);
-				       System.out.println(tm.getMap_middle().size());
-				}
-				if(rb_temp.getlife()==0)
-				{
-					action_mod=4;
-				}
-				b_sure.setEnabled(false);
-				b_cancel.setEnabled(false);
-				tm.getCurrentUser().setshoot_time(0);
-			}
-			else if(mod==3&&action_mod==3)
-			{//use a medi
-				action_mod=0;
-				tm.cardDrop();
-				tm.getCurrentUser().liferise();
-				b_sure.setEnabled(false);
-				b_cancel.setEnabled(false);
-			}
-			else if(mod==3&&action_mod==4)
-			{//save others
-				action_mod=0;
-				tm.cardDrop();
-				shoot_aim.liferise();
-				b_sure.setEnabled(false);
-				b_cancel.setEnabled(false);
-			}
-			if(mod==4)
-			{//drop card
-				tm.cardDrop();
-				b_sure.setEnabled(false);
-				b_end.setEnabled(false);
-				b_cancel.setEnabled(false);
-				tm.getCurrentUser().setshoot_time(1);
-				tm.cards_drop_num_clear();
-				mod=5;
-				current_robot=(Robot)tm.getRobot(tm.getCurrentUser());
-				tm.addCardstouser(current_robot);
-			    action_mod=0;
-			}
-			else if(mod==6&&ifsave_mod==2)
-			{//being nearly killed and use a medi
-				tm.cardDrop();
-				ifsave_mod=0;
-				tm.getCurrentUser().liferise();
-				b_sure.setEnabled(false);
-				b_end.setEnabled(false);
-				b_cancel.setEnabled(false);
-				mod=5;
-			}
-			else if(mod==6&&ifsave_mod==0)
-			{//use a drive
-				tm.cardDrop();
-				point_line=0;
-				drive_mod=0;
-				b_sure.setEnabled(false);
-				b_end.setEnabled(false);
-				b_cancel.setEnabled(false);
-				mod=5;
-			}
-		}
-		else if(e.getSource()==b_end)
-		{
-			 for(int i=0;i<tm.getMap_down().size();i++)
-             {
-            	 if(tm.getMap_down().get(i).getY()==500)
-            		 tm.setcards_drop_num(tm.getcards_drop_num()+1);
-             }
-			mod=4;
-		}
-		else if(e.getSource()==b_cancel)
-		{
-			if(mod==3||mod==4)
-			{
-				if(action_mod==4)
-				{
-					Robot temp=(Robot)shoot_aim;
-					Card card_temp=(Card)temp.saveyourself();
-					if(card_temp!=null)
-					{
-						   Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
-					       m.setObj(card_temp);
-					       tm.getMap_middle().add(m);
-					       System.out.println(tm.getMap_middle().size());
-					       b_sure.setEnabled(false);
-							b_cancel.setEnabled(false);
-							tm.redistributeSpace();
-							action_mod=0;
-					}
-					else
-					{
-						 mod=7;
-						 if_win=true;
-					}
-				}
-				else 
-				{
-					 System.out.println(tm.getMap_middle().size());
-				     b_sure.setEnabled(false);
-				     b_cancel.setEnabled(false);
-				     tm.redistributeSpace();
-					 action_mod=0;
-				}
-				action_mod=0;
-			}
-			else if(mod==6&&ifsave_mod==0)
-			{
-				tm.redistributeSpace();
-				b_sure.setEnabled(false);
-				b_cancel.setEnabled(false);
-				tm.getCurrentUser().beattack();
-				if(tm.getCurrentUser().getlife()<=0)
-				{
-					if(current_robot.ifSave()!=null)
-					{
-						
-					}
-					else
-					{
-						ifsave_mod=1;
-					}
-					b_cancel.setEnabled(true);
-				}
-				else
-				mod=5;
-			}
-			else if(mod==6&&ifsave_mod!=0)
-			{
-				tm.redistributeSpace();
-				mod=7;
-				if_win=false;
-			}
-			point_line=0;
-		}
-		repaint();
 	}
 }
