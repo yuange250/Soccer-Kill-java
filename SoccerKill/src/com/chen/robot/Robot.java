@@ -7,6 +7,12 @@ import com.chen.roles.Role;
 import com.chen.tools.Mapping;
 
 public class Robot extends Role{
+	private int[] enemyIdentities;
+	public Robot(int identity)
+	{
+		    this.identity=identity;
+	    	enemyIdentities[0]=1;
+	}
 	public Card beattack()
 	{
 		for(int i=0;i<cards.size();i++)
@@ -130,5 +136,12 @@ public class Robot extends Role{
 	public Card ifSave()
 	{
 		return null;
+	}
+	private Mapping getAim()
+	{
+		if(this.identity==3)
+		{
+			
+		}
 	}
 }

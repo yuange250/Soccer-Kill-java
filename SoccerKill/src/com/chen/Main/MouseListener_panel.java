@@ -1,4 +1,4 @@
-package com.chen.UI;
+package com.chen.Main;
 
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -9,8 +9,8 @@ import com.chen.roles.Role;
 import com.chen.tools.Mapping;
 
 public class MouseListener_panel implements MouseListener{
-    private Main_Panel mp;
-    public MouseListener_panel(Main_Panel mp)
+    private GameMainThread mp;
+    public MouseListener_panel(GameMainThread mp)
     {
     	this.mp=mp;
     }
@@ -30,7 +30,7 @@ public class MouseListener_panel implements MouseListener{
 	          		if(card_temp.gettype().equals("shoot")&&mp.tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==550)
 	          		{//selected a shoot
 	          		    	 temp.setY(500);
-	          		    	 mp.b_cancel.setEnabled(true);
+	          		    	 mp.mp.b_cancel.setEnabled(true);
 	          		    	 mp.action_mod=1;
 	          		}
 	          		else if(card_temp.gettype().equals("medi")&&temp.getY()==550)
@@ -38,10 +38,10 @@ public class MouseListener_panel implements MouseListener{
 	          		    	 temp.setY(500);
 	          		    	 if(mp.tm.getCurrentUser().getmaxlife()>mp.tm.getCurrentUser().getlife())
 	          		    	 {
-	          		    	    mp.b_sure.setEnabled(true);
+	          		    	    mp.mp.b_sure.setEnabled(true);
 	          		    	 }
 	          		    	 mp.action_mod=3;
-	          		    	 mp.b_cancel.setEnabled(true);
+	          		    	 mp.mp.b_cancel.setEnabled(true);
 	          		    	
 	          		}
 	          	}
@@ -52,7 +52,7 @@ public class MouseListener_panel implements MouseListener{
 	          		if(card_temp.gettype().equals("shoot")&&mp.tm.getCurrentUser().getshoot_time()!=0&&temp.getY()==500)
 	          		{//unselect a shoot
 	          		    	 temp.setY(550);
-	          		    	 mp.b_cancel.setEnabled(false);
+	          		    	 mp.mp.b_cancel.setEnabled(false);
 	          		         mp.action_mod=0;
 	          		}
 	          }
@@ -63,7 +63,7 @@ public class MouseListener_panel implements MouseListener{
 	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
 	          		{
 	          		    	 temp.setY(550);
-	          		    	 mp.b_cancel.setEnabled(false);
+	          		    	 mp.mp.b_cancel.setEnabled(false);
 	          		         mp.action_mod=0;
 	          		}
 	          }
@@ -78,7 +78,7 @@ public class MouseListener_panel implements MouseListener{
 	          		if(card_temp.gettype().equals("medi")&&temp.getY()==550)
 	          		{
 	          		    	 temp.setY(500);
-	          		    	 mp.b_sure.setEnabled(true);
+	          		    	 mp.mp.b_sure.setEnabled(true);
 	          		}
 	          }
 	          else if(mp.action_mod==1&&temp.getobj() instanceof Role)
@@ -89,7 +89,7 @@ public class MouseListener_panel implements MouseListener{
 	        		  distance=5-distance;
 	        	  if(distance<=mp.tm.getCurrentUser().getattackdistance()&&mp.shoot_aim!=mp.tm.getCurrentUser())
 	        	  {
-	        		  mp.b_sure.setEnabled(true);
+	        		  mp.mp.b_sure.setEnabled(true);
 	        		  mp.point_line=1;
 	        	  }
 	        	  else
@@ -105,13 +105,13 @@ public class MouseListener_panel implements MouseListener{
 	          	 if(temp.getY()==550&&mp.tm.getcards_drop_num()!=(mp.tm.getCurrentUser().getCards().size()-mp.tm.getCurrentUser().getlife()))
 	          	 {
 	          		  temp.setY(500);
-	          		  mp.b_cancel.setEnabled(true);
+	          		  mp.mp.b_cancel.setEnabled(true);
 	          		  mp.tm.setcards_drop_num(mp.tm.getcards_drop_num()+1);
 	          	 }
 	          	 else if(temp.getY()==500)
           		 {
           		      temp.setY(550);
-          		      mp.b_cancel.setEnabled(false);
+          		      mp.mp.b_cancel.setEnabled(false);
           		      mp.tm.setcards_drop_num(mp.tm.getcards_drop_num()-1);
           		 }
 	        }
@@ -125,8 +125,8 @@ public class MouseListener_panel implements MouseListener{
 	          		if(card_temp.gettype().equals("drive")&&temp.getY()==550)
 	          		{
 	          		    	 temp.setY(500);
-	          		    	 mp.b_sure.setEnabled(true);
-	          		    	 mp.b_cancel.setEnabled(true);
+	          		    	 mp.mp.b_sure.setEnabled(true);
+	          		    	 mp.mp.b_cancel.setEnabled(true);
 	          		    	 mp.drive_mod=1;
 	          		}
 	          		
@@ -139,7 +139,7 @@ public class MouseListener_panel implements MouseListener{
 	          		if(card_temp.gettype().equals("drive")&&temp.getY()==500)
 	          		{
 	          		    	 temp.setY(550);
-	          		    	 mp.b_sure.setEnabled(false);
+	          		    	 mp.mp.b_sure.setEnabled(false);
 	          		    	 mp.drive_mod=0;
 	          		}
 	          }
@@ -153,8 +153,8 @@ public class MouseListener_panel implements MouseListener{
 	          		if(card_temp.gettype().equals("medi")&&temp.getY()==550)
 	          		{
 	          		    	 temp.setY(500);
-	          		    	 mp.b_sure.setEnabled(true);
-	          		    	 mp.b_cancel.setEnabled(true);
+	          		    	 mp.mp.b_sure.setEnabled(true);
+	          		    	 mp.mp.b_cancel.setEnabled(true);
 	          		    	 mp.ifsave_mod=2; 
 	          		}
 	          		
@@ -167,28 +167,28 @@ public class MouseListener_panel implements MouseListener{
 	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
 	          		{
 	          		    	 temp.setY(550);
-	          		    	 mp.b_sure.setEnabled(false);
+	          		    	 mp.mp.b_sure.setEnabled(false);
 	          		    	 mp.ifsave_mod=1; 
 	          		}
 	          }
 		}
-		mp.repaint();
+		mp.mp.repaint();
 	 }
 	}
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	public void mouseExited(MouseEvent arg0) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	public void mousePressed(MouseEvent arg0) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		
 	}
 

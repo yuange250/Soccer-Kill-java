@@ -1,21 +1,22 @@
-package com.chen.UI;
+package com.chen.Main;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import com.chen.UI.Main_Panel;
 import com.chen.cards.Card;
 import com.chen.robot.Robot;
 import com.chen.tools.Mapping;
 
 public class ActionListener_panel implements ActionListener{
-	private Main_Panel mp;
-	public ActionListener_panel(Main_Panel mp)
+	private GameMainThread mp;
+	public ActionListener_panel(GameMainThread mp)
 	{
 		this.mp=mp;
 	}
 	public void actionPerformed(ActionEvent e) {
 		// shoot_aim
-		if(e.getSource()==mp.b_sure)
+		if(e.getSource()==mp.mp.b_sure)
 		{
 			if(mp.mod==3&&mp.action_mod==1)
 			{//shoot aim
@@ -35,8 +36,8 @@ public class ActionListener_panel implements ActionListener{
 				{
 					mp.action_mod=4;
 				}
-				mp.b_sure.setEnabled(false);
-				mp.b_cancel.setEnabled(false);
+				mp.mp.b_sure.setEnabled(false);
+				mp.mp.b_cancel.setEnabled(false);
 				mp.tm.getCurrentUser().setshoot_time(0);
 			}
 			else if(mp.mod==3&&mp.action_mod==3)
@@ -44,23 +45,23 @@ public class ActionListener_panel implements ActionListener{
 				mp.action_mod=0;
 				mp.tm.cardDrop();
 				mp.tm.getCurrentUser().liferise();
-				mp.b_sure.setEnabled(false);
-				mp.b_cancel.setEnabled(false);
+				mp.mp.b_sure.setEnabled(false);
+				mp.mp.b_cancel.setEnabled(false);
 			}
 			else if(mp.mod==3&&mp.action_mod==4)
 			{//save others
 				mp.action_mod=0;
 				mp.tm.cardDrop();
 				mp.shoot_aim.liferise();
-				mp.b_sure.setEnabled(false);
-				mp.b_cancel.setEnabled(false);
+				mp.mp.b_sure.setEnabled(false);
+				mp.mp.b_cancel.setEnabled(false);
 			}
 			if(mp.mod==4)
 			{//drop card
 				mp.tm.cardDrop();
-				mp.b_sure.setEnabled(false);
-				mp.b_end.setEnabled(false);
-				mp.b_cancel.setEnabled(false);
+				mp.mp.b_sure.setEnabled(false);
+				mp.mp.b_end.setEnabled(false);
+				mp.mp.b_cancel.setEnabled(false);
 				mp.tm.getCurrentUser().setshoot_time(1);
 				mp.tm.cards_drop_num_clear();
 				mp.mod=5;
@@ -73,9 +74,9 @@ public class ActionListener_panel implements ActionListener{
 				mp.tm.cardDrop();
 				mp.ifsave_mod=0;
 				mp.tm.getCurrentUser().liferise();
-				mp.b_sure.setEnabled(false);
-				mp.b_end.setEnabled(false);
-				mp.b_cancel.setEnabled(false);
+				mp.mp.b_sure.setEnabled(false);
+				mp.mp.b_end.setEnabled(false);
+				mp.mp.b_cancel.setEnabled(false);
 				mp.mod=5;
 			}
 			else if(mp.mod==6&&mp.ifsave_mod==0)
@@ -83,13 +84,13 @@ public class ActionListener_panel implements ActionListener{
 				mp.tm.cardDrop();
 				mp.point_line=0;
 				mp.drive_mod=0;
-				mp.b_sure.setEnabled(false);
-				mp.b_end.setEnabled(false);
-				mp.b_cancel.setEnabled(false);
+				mp.mp.b_sure.setEnabled(false);
+				mp.mp.b_end.setEnabled(false);
+				mp.mp.b_cancel.setEnabled(false);
 				mp.mod=5;
 			}
 		}
-		else if(e.getSource()==mp.b_end)
+		else if(e.getSource()==mp.mp.b_end)
 		{
 			 for(int i=0;i<mp.tm.getMap_down().size();i++)
              {
@@ -98,7 +99,7 @@ public class ActionListener_panel implements ActionListener{
              }
 			mp.mod=4;
 		}
-		else if(e.getSource()==mp.b_cancel)
+		else if(e.getSource()==mp.mp.b_cancel)
 		{
 			if(mp.mod==3||mp.mod==4)
 			{
@@ -112,8 +113,8 @@ public class ActionListener_panel implements ActionListener{
 					       m.setObj(card_temp);
 					       mp.tm.getMap_middle().add(m);
 					       System.out.println(mp.tm.getMap_middle().size());
-					       mp.b_sure.setEnabled(false);
-							mp.b_cancel.setEnabled(false);
+					       mp.mp.b_sure.setEnabled(false);
+							mp.mp.b_cancel.setEnabled(false);
 							mp.tm.redistributeSpace();
 							mp.action_mod=0;
 					}
@@ -126,8 +127,8 @@ public class ActionListener_panel implements ActionListener{
 				else 
 				{
 					 System.out.println(mp.tm.getMap_middle().size());
-				     mp.b_sure.setEnabled(false);
-				     mp.b_cancel.setEnabled(false);
+				     mp.mp.b_sure.setEnabled(false);
+				     mp.mp.b_cancel.setEnabled(false);
 				     mp.tm.redistributeSpace();
 					 mp.action_mod=0;
 				}
@@ -136,8 +137,8 @@ public class ActionListener_panel implements ActionListener{
 			else if(mp.mod==6&&mp.ifsave_mod==0)
 			{
 				mp.tm.redistributeSpace();
-				mp.b_sure.setEnabled(false);
-				mp.b_cancel.setEnabled(false);
+				mp.mp.b_sure.setEnabled(false);
+				mp.mp.b_cancel.setEnabled(false);
 				mp.tm.getCurrentUser().beattack();
 				if(mp.tm.getCurrentUser().getlife()<=0)
 				{
@@ -149,7 +150,7 @@ public class ActionListener_panel implements ActionListener{
 					{
 						mp.ifsave_mod=1;
 					}
-					mp.b_cancel.setEnabled(true);
+					mp.mp.b_cancel.setEnabled(true);
 				}
 				else
 				mp.mod=5;
@@ -162,6 +163,6 @@ public class ActionListener_panel implements ActionListener{
 			}
 			mp.point_line=0;
 		}
-		mp.repaint();
+		mp.mp.repaint();
 	}
 }

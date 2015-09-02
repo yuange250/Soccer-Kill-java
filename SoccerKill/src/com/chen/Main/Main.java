@@ -4,8 +4,10 @@ import com.chen.UI.*;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO ×Ô¶¯Éú³ÉµÄ·½·¨´æ¸ù
-          Main_frame mf=new Main_frame();
+		// TODO ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ÉµÄ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+         GameMainThread gmt=new GameMainThread();
+         Thread t=new Thread(gmt);
+         t.start();
 	}
 
 }

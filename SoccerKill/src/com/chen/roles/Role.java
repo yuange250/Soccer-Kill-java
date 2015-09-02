@@ -15,6 +15,11 @@ public class Role {
 	protected int shoot_time;
 	private int Id;
 	protected int attackdistance;
+	protected int identity;//1 for zhugong 2 for zhongchen 3 for fanzie 4 for neijian
+	public int getIdentity()
+	{
+		return identity;
+	}
 	public int getattackdistance()
 	{
 		return attackdistance;
