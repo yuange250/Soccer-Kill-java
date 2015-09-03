@@ -18,21 +18,16 @@ public class GameManager {
 	private int pointer=0;
 	private int cardpointer=1;
 	public GameManager(){
-		Ronaldo ronaldo1=new Ronaldo();
-		Ronaldo ronaldo2=new Ronaldo();
-		Ronaldo ronaldo3=new Ronaldo();
-		Ronaldo ronaldo4=new Ronaldo();
-		Messi messi=new Messi();
+		Ronaldo ronaldo1=new Ronaldo(1,3);
+		Ronaldo ronaldo2=new Ronaldo(2,2);
+		Ronaldo ronaldo3=new Ronaldo(3,3);
+		Ronaldo ronaldo4=new Ronaldo(4,4);
+		Messi messi=new Messi(0,1);
 		roles[0]=messi;
-		roles[0].SetId(0);
 		roles[1]=ronaldo1;
-		roles[1].SetId(1);
 		roles[2]=ronaldo2;
-		roles[2].SetId(2);
 		roles[3]=ronaldo3;
-		roles[3].SetId(3);
 		roles[4]=ronaldo4;
-		roles[4].SetId(4);
 		for(int i=2;i<=9;i++)
 		{
 	    Card card=new Card(i,"diamond","drive");

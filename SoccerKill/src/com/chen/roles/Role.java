@@ -16,6 +16,12 @@ public class Role {
 	private int Id;
 	protected int attackdistance;
 	protected int identity;//1 for zhugong 2 for zhongchen 3 for fanzie 4 for neijian
+	public Role(int Id,int identity)
+	{
+		this.Id=Id;
+		this.identity=identity;
+	}
+	
 	public int getIdentity()
 	{
 		return identity;
@@ -111,5 +117,6 @@ public class Role {
 	{
 		judge_over=true;
 	}
+	
 }
 

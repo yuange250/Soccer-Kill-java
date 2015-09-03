@@ -123,11 +123,11 @@ public class GameMainThread  implements Runnable{
 						mp.repaint();
 						if(shoot_aim==tm.getCurrentUser())
 						{
-						Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
-						m.setObj(temp);
-						tm.getMap_middle().add(m);
-						mod=6;
-						mp.b_cancel.setEnabled(true);
+						    Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
+						    m.setObj(temp);
+						    tm.getMap_middle().add(m);
+						    mod=6;
+						    mp.b_cancel.setEnabled(true);
 						}
 						else
 						{
@@ -151,6 +151,13 @@ public class GameMainThread  implements Runnable{
 							
 							point_line=0;
 						}
+					    //machine learning
+						for(int j=1;j<tm.getMap_role().size();j++)
+						{
+							Robot r=(Robot)tm.getMap_role().get(j).getobj();
+							r.judgeEnemies(current_robot, shoot_aim);
+						}
+						
 					}
 					else
 					{//the role use a card that others can not disturb

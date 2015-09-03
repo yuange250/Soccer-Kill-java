@@ -6,8 +6,8 @@ import com.chen.cards.Card;
 import com.chen.robot.Robot;
 
 public class Ronaldo extends Robot{
-	public Ronaldo(){
-		super();
+	public Ronaldo(int Id,int identity){
+		super(Id,identity);
 		cards=new Vector<Card>();
 		  name="ronaldo";
 		  life=2;

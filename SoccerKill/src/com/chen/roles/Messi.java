@@ -4,7 +4,8 @@ import java.util.Vector;
 import com.chen.cards.*;
 
 public class Messi extends Role{
-  public Messi(){
+  public Messi(int Id,int identity){
+	  super(Id,identity);
 	  cards=new Vector<Card>();
 	  name="messi";
 	  life=2;
