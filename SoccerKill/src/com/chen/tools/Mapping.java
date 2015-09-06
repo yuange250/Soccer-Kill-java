@@ -7,6 +7,7 @@ public class Mapping {
 	private int width;
 	private Object object;
 	private int life=0;
+	private boolean enable=true;
 	public Mapping(int locX,int locY,int height,int width){
 		this.locX=locX;
 		this.locY=locY;
@@ -46,5 +47,13 @@ public class Mapping {
 	public int getLife()
 	{
 		return this.life;
+	}
+	public void setEnable(boolean enable)
+	{
+		this.enable=enable;
+	}
+	public boolean getEnable()
+	{
+		return this.enable;
 	}
 }

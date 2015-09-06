@@ -15,21 +15,20 @@ public class TotalMapping implements Runnable{
 	 
 	  private GameManager gm=new GameManager();//distribute cards
 	  private Role current_role=gm.getCurrentRole();
-	  private int cards_drop_num=0;
 	
 
 	  //this part is going to concentrate on mod 4 drop cards
-	  public void cards_drop_num_clear()
-	  {
-		  cards_drop_num=0;
-	  }
 	  public int getcards_drop_num()
 	  {
-		  return cards_drop_num;
-	  }
-	  public void setcards_drop_num(int num)
-	  {
-		  cards_drop_num=num;
+		  int num=0;
+		  for(int i=0;i<map_down.size();i++)
+		  {
+			  if(map_down.get(i).getY()==500)
+			  {
+				  num++;
+			  }
+		  }
+		  return num;
 	  }
 	  
 	  
@@ -197,5 +196,89 @@ public class TotalMapping implements Runnable{
 				}
 			}
 			this.redistributeSpace();
+		}
+		public void redistributeId()
+		{
+			gm.redistributeId();
+		}
+		public int getTotalRolenum()
+		{
+			return gm.getTotalrolenum();
+		}
+		public void findTheAbleCard(int mod,int second_mod)
+		{
+			if(mod==3)
+			{
+				for(int i=0;i<map_down.size();i++)
+				{
+					Card card_temp=(Card)map_down.get(i).getobj();
+					if(card_temp.gettype().equals("shoot")&&this.current_role.getshoot_time()!=0)
+					{
+						card_temp.setEnable(true);
+					}
+					else if(card_temp.gettype().equals("medi")&&this.current_role.getlife()<this.current_role.getmaxlife())
+					{
+						card_temp.setEnable(true);
+					}
+					else
+					{
+						card_temp.setEnable(false);
+					}
+				}
+			}
+			else if(mod==4)
+			{
+				for(int i=0;i<map_down.size();i++)
+				{
+				   	Card card_temp=(Card)map_down.get(i).getobj();
+					card_temp.setEnable(true);
+				}
+			}
+			else if(mod==6)
+			{
+				for(int i=0;i<map_down.size();i++)
+				{
+					Card card_temp=(Card)map_down.get(i).getobj();
+					if(card_temp.gettype().equals("drive"))
+						card_temp.setEnable(true);
+					else
+						card_temp.setEnable(false);
+				}
+			}
+			else if(mod==8&&second_mod==1)
+			{
+				for(int i=0;i<map_down.size();i++)
+				{
+					Card card_temp=(Card)map_down.get(i).getobj();
+					if(card_temp.gettype().equals("medi"))
+						card_temp.setEnable(true);
+					else
+						card_temp.setEnable(false);
+				}
+			}
+			else
+			{
+				for(int i=0;i<map_down.size();i++)
+				{
+				   	Card card_temp=(Card)map_down.get(i).getobj();
+					card_temp.setEnable(false);
+				}
+			}
+		}
+		public void findTheEableRole()
+		{
+		  for(int i=0;i<map_role.size();i++)
+		  {
+			  Role role_temp=(Role)map_role.get(i).getobj();
+      	      int distance=role_temp.getId()-current_role.getId();
+      	      if(distance>=3)
+      		     distance=this.getTotalRolenum()-distance;
+      	     if(distance<=current_role.getattackdistance()&&role_temp!=current_role)
+      	     {
+      		     map_role.get(i).setEnable(true);
+      	     }
+      	    else
+      		    map_role.get(i).setEnable(false); 
+	      }
 		}
 }

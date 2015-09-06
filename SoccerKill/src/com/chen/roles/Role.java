@@ -6,6 +6,7 @@ import com.chen.tools.Mapping;
 
 public class Role {
 	protected int maxLife;
+	protected boolean alive=true;
 	protected int life=0;
 	protected Equipment[] equip;
 	protected Vector<Card> cards;
@@ -21,7 +22,24 @@ public class Role {
 		this.Id=Id;
 		this.identity=identity;
 	}
-	
+	public boolean ifAlive()
+	{
+		return alive;
+	}
+	public Vector<Mapping> die()
+	{
+		cards_giveup=new Vector<Mapping>();
+		for(int i=0,length=150;i<cards.size();i++,length+=100)
+		{
+			Mapping m=new Mapping(length,250,150,100);
+			m.setObj(this.getCards().get(0));
+			cards_giveup.add(m);
+			this.getCards().remove(0);
+		}
+		this.Id=-1;
+		alive=false;
+		return cards_giveup;
+	}
 	public int getIdentity()
 	{
 		return identity;

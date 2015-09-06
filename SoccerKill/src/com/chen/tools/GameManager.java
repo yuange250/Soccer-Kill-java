@@ -17,6 +17,7 @@ public class GameManager {
 	private int cardsnum=1;
 	private int pointer=0;
 	private int cardpointer=1;
+	private int totalrolenum=5;
 	public GameManager(){
 		Ronaldo ronaldo1=new Ronaldo(1,3);
 		Ronaldo ronaldo2=new Ronaldo(2,2);
@@ -67,9 +68,16 @@ public class GameManager {
 		return roles[0];
 	}
 	public Role nextRole(Role role){
-		if((role.getId()+1)!=5)
-		return roles[role.getId()+1];
-		else
+		if((role.getId()+1)!=totalrolenum)
+		{
+		    for(int i=0;i<5;i++)
+		    {
+		    	if(roles[i].getId()==role.getId()+1)
+		    	{
+		    		return roles[i];
+		    	}
+		    }
+		}
 		return roles[0];
 	}
 	public void washCards()
@@ -124,5 +132,21 @@ public class GameManager {
 	public  synchronized void collectoldcards(Card card)
 	{
 		dropcards[dropcardsnum++]=card;
+	}
+	protected void redistributeId()
+	{
+	     totalrolenum--;
+	     for(int i=0,j=0;i<5;i++)
+	     {
+	    	 if(roles[i].ifAlive())
+	    	 {
+	    		 roles[i].SetId(j);
+	    		 j++;
+	    	 }
+	     }
+	}
+	protected int getTotalrolenum()
+	{
+		return this.totalrolenum;
 	}
 }

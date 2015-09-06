@@ -1,6 +1,7 @@
 package com.chen.UI;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -12,6 +13,8 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import com.chen.Main.ActionListener_panel;
@@ -27,10 +30,10 @@ public class Main_Panel extends JPanel{
 	 public  JButton b_sure=new JButton("sure");
 	 public  JButton b_cancel=new JButton("cancel");
 	 public JButton b_end=new JButton("end");
-	  
+	 public JTextArea jt;
 	 private GameMainThread gmt;
 public Main_Panel(){//init the panel
-   	  this.setSize(800,700);
+   	  this.setSize(1000,700);
    	  this.setBackground(Color.orange);
    	  this.setLayout(null); 
   // 	  this.repaint();
@@ -41,9 +44,16 @@ public Main_Panel(){//init the panel
    	  b_end.setLayout(null);
    	  b_sure.setSize(60,30);
    	  b_cancel.setSize(60, 30);
+   	  jt=new   JTextArea(200,200); 
+      jt.setFont(new   Font( "标楷体 ",Font.BOLD,16)); 
+      jt.setLineWrap(true);//激活自动换行功能 
+      jt.setWrapStyleWord(true);//激活断行不断字功能 
+      JScrollPane js=new JScrollPane(jt);
+   	  this.add(js);
    	  this.add(b_sure);
    	  this.add(b_cancel);
    	  this.add(b_end);
+   	  js.setBounds(800,0,200,200);
    	  b_sure.setBounds(590, 520, 60, 30);
    	  b_sure.setBorder(new EmptyBorder(0, 0, 0, 0));
    	  b_cancel.setBounds(590,550,60, 30);
@@ -62,6 +72,8 @@ public Main_Panel(){//init the panel
 //   	  b_end.addActionListener(ap);
 //   	  Thread t=new Thread(tm);//the auto clean is start,map_middle is autoclean
 //  	  t.start();
+   
+   	 
    }
   public void paint(Graphics g)
      {//paint function
@@ -93,6 +105,29 @@ public Main_Panel(){//init the panel
    			  g.setFont(font);
    			  g.setColor(Color.RED);
    			  g.drawString(String.valueOf(role_temp.getCards().size()),map_role.get(i).getX()+130,map_role.get(i).getY()+180);
+   	          if(role_temp.getlife()<=0&&role_temp.ifAlive())
+   	          {
+   	        	 g.drawString("Save me!",map_role.get(i).getX(),map_role.get(i).getY()+100);
+   	          }
+   			  if(!role_temp.ifAlive())
+   	          {
+	        	  String s="die";
+   	        	  switch(role_temp.getIdentity())
+   	        	  {  
+   	        	     case 2:s="zhongchen \n"+s;
+   	        	     break;
+   	        	     case 3:s="fanzie \n"+s;
+   	        	     break;
+   	        	     case 4:s="neijian \n"+s;
+   	        	     break;
+   	        	  }
+      	    	 g.drawString(s,map_role.get(i).getX(),map_role.get(i).getY()+100);
+   	          }
+   	          if(gmt.getMod()==3&&gmt.getActionMod()==1&&(!map_role.get(i).getEnable()))
+   	          {
+   	        	image=getToolkit().getImage("image/gray.png");
+   	            g.drawImage(image, map_role.get(i).getX(),map_role.get(i).getY(),map_role.get(i).getWidth(),map_role.get(i).getHeight(),this);
+   	          }
    	  }
    	  for(int i=0;i<map_down.size();i++)
    	  {//paint map_middle
@@ -100,6 +135,11 @@ public Main_Panel(){//init the panel
    			  filename="cards/"+card_temp.gettype()+"_"+card_temp.getcolor()+"_"+card_temp.getpoint()+".jpg";
    			  Image image=getToolkit().getImage(filename);
    	    	  g.drawImage(image, map_down.get(i).getX(),map_down.get(i).getY(),map_down.get(i).getWidth(),map_down.get(i).getHeight(),this);
+   	          if(!card_temp.getEnable())
+   	          {
+   	               image=getToolkit().getImage("image/gray.png");
+   	               g.drawImage(image, map_down.get(i).getX(),map_down.get(i).getY(),map_down.get(i).getWidth(),map_down.get(i).getHeight(),this);
+   	          }
    	  }
    	  for(int i=0;i<map_middle.size();i++)
    	  {//paint map_down
@@ -139,6 +179,8 @@ public Main_Panel(){//init the panel
    		     g.drawString("game over you win!", 0, 30);
    	         else
    	         g.drawString("game over you lose!", 0, 30);
+   	  case 8:if(gmt.getIfSaveMod()==1)
+   		     g.drawString("if save him?", 0, 30); 
    	         break;
    	  }
    	  switch(gmt.getPointLine())

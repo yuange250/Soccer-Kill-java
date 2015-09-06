@@ -54,6 +54,8 @@ public class MouseListener_panel implements MouseListener{
 	          		    	 temp.setY(550);
 	          		    	 mp.mp.b_cancel.setEnabled(false);
 	          		         mp.action_mod=0;
+	          		         mp.point_line=0;
+	          		         mp.mp.b_sure.setEnabled(false);
 	          		}
 	          }
 	          else if(mp.action_mod==3&&temp.getobj() instanceof Card)
@@ -67,26 +69,26 @@ public class MouseListener_panel implements MouseListener{
 	          		         mp.action_mod=0;
 	          		}
 	          }
-	          else if(mp.action_mod==4&&temp.getobj() instanceof Card)
-	          {//if save someone
-	        	   Card card_temp=(Card)temp.getobj();
-	          	    System.out.println(card_temp.gettype());
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
-	          		{
-	          		    	 temp.setY(550);
-	          		}
-	          		if(card_temp.gettype().equals("medi")&&temp.getY()==550)
-	          		{
-	          		    	 temp.setY(500);
-	          		    	 mp.mp.b_sure.setEnabled(true);
-	          		}
-	          }
+//	          else if(mp.action_mod==4&&temp.getobj() instanceof Card)
+//	          {//if save someone
+//	        	   Card card_temp=(Card)temp.getobj();
+//	          	    System.out.println(card_temp.gettype());
+//	          		if(card_temp.gettype().equals("medi")&&temp.getY()==500)
+//	          		{
+//	          		    	 temp.setY(550);
+//	          		}
+//	          		if(card_temp.gettype().equals("medi")&&temp.getY()==550)
+//	          		{
+//	          		    	 temp.setY(500);
+//	          		    	 mp.mp.b_sure.setEnabled(true);
+//	          		}
+//	          }
 	          else if(mp.action_mod==1&&temp.getobj() instanceof Role)
 	          {//select a shoot and select a role
 	        	  mp.shoot_aim=(Role)temp.getobj();
 	        	  int distance=mp.shoot_aim.getId()-mp.tm.getCurrentUser().getId();
 	        	  if(distance>=3)
-	        		  distance=5-distance;
+	        		  distance=mp.tm.getTotalRolenum()-distance;
 	        	  if(distance<=mp.tm.getCurrentUser().getattackdistance()&&mp.shoot_aim!=mp.tm.getCurrentUser())
 	        	  {
 	        		  mp.mp.b_sure.setEnabled(true);
@@ -106,17 +108,15 @@ public class MouseListener_panel implements MouseListener{
 	          	 {
 	          		  temp.setY(500);
 	          		  mp.mp.b_cancel.setEnabled(true);
-	          		  mp.tm.setcards_drop_num(mp.tm.getcards_drop_num()+1);
 	          	 }
 	          	 else if(temp.getY()==500)
           		 {
           		      temp.setY(550);
           		      mp.mp.b_cancel.setEnabled(false);
-          		      mp.tm.setcards_drop_num(mp.tm.getcards_drop_num()-1);
           		 }
 	        }
 		}
-		if(mp.mod==6&&mp.ifsave_mod!=1)
+		if(mp.mod==6)
 		{
 			 if(mp.drive_mod==0&&temp.getobj() instanceof Card)
 	          {//current role use a card
@@ -144,7 +144,7 @@ public class MouseListener_panel implements MouseListener{
 	          		}
 	          }
 		}
-		else if(mp.mod==6&&mp.ifsave_mod!=0)
+		else if(mp.mod==8&&mp.ifsave_mod!=0)
 		{
 			 if(mp.ifsave_mod==1&&temp.getobj() instanceof Card)
 	          {//current role use a card
@@ -157,9 +157,8 @@ public class MouseListener_panel implements MouseListener{
 	          		    	 mp.mp.b_cancel.setEnabled(true);
 	          		    	 mp.ifsave_mod=2; 
 	          		}
-	          		
 	          	}
-	          else if(mp.drive_mod==2&&temp.getobj() instanceof Card)
+	          else if(mp.ifsave_mod==2&&temp.getobj() instanceof Card)
 	          {
 	        	   Card card_temp=(Card)temp.getobj();
 	          	    System.out.println(card_temp.gettype());

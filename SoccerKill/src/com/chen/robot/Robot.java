@@ -28,7 +28,7 @@ public class Robot extends Role{
 		lifedrop(1);
 		return null;
 	}
-	public Card excute(Vector<Mapping> map_role)
+	public Card excute(Vector<Mapping> map_role,int rolenum)
 	{
 		try {
 			Thread.sleep(1000);
@@ -49,7 +49,7 @@ public class Robot extends Role{
 			}
 			else if(cards.get(i).gettype().equals("shoot")&&this.getshoot_time()!=0)
 			{
-				temp_map=this.getAim(map_role);
+				temp_map=this.getAim(map_role,rolenum);
 				if(temp_map!=null)
 				{
 				   temp=cards.get(i);
@@ -93,6 +93,7 @@ public class Robot extends Role{
 		return temp;
 	}
 	public Vector<Mapping> end(){
+		cards_giveup=new Vector<Mapping>();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
@@ -110,24 +111,57 @@ public class Robot extends Role{
 		}
 		return cards_giveup;
 	}
-	public Card ifSave()
-	{
+	public Card ifSave(Role aim)
+	{//if save someone;
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Card temp=null;
+		for(int i=0;i<this.cards.size();i++)
+		{
+			if(cards.get(i).gettype().equals("medi"))
+			{
+				temp=cards.get(i);
+				cards.remove(i);
+				break;
+			}
+		}
+		if(temp!=null)
+		{
+		   if(this.getIdentity()==3)
+		  {
+			  if(aim.getIdentity()==3)
+			 {
+			        return temp;
+			 }
+		   }
+		    else if(this.getIdentity()==2)
+		   {
+			   if(aim.getIdentity()==1)
+			  {
+				    return temp;
+			  }
+		    }
+		}
 		return null;
 	}
-	private Mapping getAim(Vector<Mapping> map_role)
+	private Mapping getAim(Vector<Mapping> map_role,int role_num)
 	{
 		Card temp=null;
 		Role role_temp = null;
 		for(int j=0;j<map_role.size();j++)
 		{
 			role_temp=(Role)map_role.get(j).getobj();
-			if(role_temp.getId()!=this.getId())
+			if(role_temp.getId()!=this.getId()&&role_temp.ifAlive())
 			{
 				 int distance=this.getId()-role_temp.getId();
 				 if(distance<0)
 					 distance=-distance;
 	        	  if(distance>=3)
-	        		  distance=5-distance;
+	        		  distance=role_num-distance;
 	        	  
 	        	  if(distance<=this.getattackdistance())
 	        	  {
@@ -181,6 +215,10 @@ public class Robot extends Role{
 	public void judgeEnemies(Role current_role,Role aim)
 	{
 		if(aim.getIdentity()==1&&current_role.getId()!=this.getId())
+		{
+			enemyIdentities[current_role.getId()]=3;
+		}
+		if(aim.getIdentity()==2&&current_role.getId()!=this.getId())
 		{
 			enemyIdentities[current_role.getId()]=3;
 		}

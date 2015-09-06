@@ -42,6 +42,10 @@ public class GameMainThread  implements Runnable{
 	  Robot current_robot;//mod 5 robot's action
 	  TotalMapping tm=new TotalMapping(); //all the items in the panel mapping the items in the program was managed in this class
 	  
+	  Role save_aim;
+	  Role role_last;
+	  int mod_last;
+	  
       public GameMainThread()
       {
           this.tm.InitSpace();
@@ -54,27 +58,28 @@ public class GameMainThread  implements Runnable{
       	  t.start();
       }
 	public void run()
-	{//thread function
-		
+	{//thread functio
 	    while(true)
 	    {
-	    	
 	    	if(mod==0)
 			{
 				mod=1;
+
 			}
 	    	else if(mod==1)
 			{
 				mod=2;
+				tm.findTheAbleCard(mod, 0);
 			}
 			else if(mod==2)
 			{
 				tm.addCardstouser(tm.getCurrentUser());
+				tm.findTheAbleCard(mod, 0);
 				mod=3;
 			}	
 			else if(mod==3)
 			{
-				
+				tm.findTheAbleCard(mod, 0);
 				if(action_mod==4)
 				{
 					mp.b_cancel.setEnabled(true);
@@ -84,16 +89,20 @@ public class GameMainThread  implements Runnable{
 				{
 					mp.b_end.setEnabled(true);
 				}
+				if(action_mod==1)
+				{
+					tm.findTheEableRole();
+				}
 			}
 			else if(mod==4)
 			{
+				tm.findTheAbleCard(mod, 0);
 				if(tm.getCurrentUser().getCards().size()<=tm.getCurrentUser().getlife())
 				{//when drop cards,if the role needn't drop any card,just skip this mod
 					mp.b_sure.setEnabled(false);
 					mp.b_end.setEnabled(false);
 					mp.b_cancel.setEnabled(false);
 					tm.getCurrentUser().setshoot_time(1);
-					tm.cards_drop_num_clear();
 					mod=5;
 					current_robot=(Robot)tm.getRobot(tm.getCurrentUser());
 					tm.addCardstouser(current_robot);
@@ -113,14 +122,17 @@ public class GameMainThread  implements Runnable{
 			}
 			else if(mod==5)
 			{
+				tm.findTheAbleCard(mod, 0);
 				Card temp;
-				if((temp=current_robot.excute(tm.getMap_role()))!=null)
+				if((temp=current_robot.excute(tm.getMap_role(),tm.getTotalRolenum()))!=null)
 				{
 					if(temp.gettype()=="shoot")
 					{//the robot shoot someone
 						shoot_aim=(Role)temp.getaim().getobj();
 						point_line=2;
 						mp.repaint();
+						mp.jt.append(current_robot.getname()+"向"+shoot_aim.getname()+"出了一张射\n");
+						mp.jt.setCaretPosition(mp.jt.getText().length());
 						if(shoot_aim==tm.getCurrentUser())
 						{
 						    Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
@@ -144,11 +156,12 @@ public class GameMainThread  implements Runnable{
 							}
 							if((card_temp=rb_temp.beattack())!=null)
 							{
+								   mp.jt.append(shoot_aim.getname()+"出了一张挡\n");
+								   mp.jt.setCaretPosition(mp.jt.getText().length());
 							       m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
 							       m.setObj(card_temp);
 							       tm.getMap_middle().add(m);
 							}
-							
 							point_line=0;
 						}
 					    //machine learning
@@ -157,7 +170,13 @@ public class GameMainThread  implements Runnable{
 							Robot r=(Robot)tm.getMap_role().get(j).getobj();
 							r.judgeEnemies(current_robot, shoot_aim);
 						}
-						
+						if(shoot_aim.getlife()<=0)
+						{
+							save_aim=shoot_aim;
+							role_last=current_robot;
+							mod_last=mod;
+							mod=8;
+						}
 					}
 					else
 					{//the role use a card that others can not disturb
@@ -169,6 +188,8 @@ public class GameMainThread  implements Runnable{
 				else
 				{//the robot has nothing to do
 					Vector<Mapping> m=current_robot.end();
+					mp.jt.append(current_robot.getname()+"弃牌\n");
+					mp.jt.setCaretPosition(mp.jt.getText().length());
 				    for(int i=0;i<m.size();i++)
 				    {
 				    	tm.getMap_middle().add(m.get(i));
@@ -186,11 +207,66 @@ public class GameMainThread  implements Runnable{
 					}
 				}
 			}
+			else if(mod==6)
+			{
+				tm.findTheAbleCard(mod, 0);
+			}
 			else if(mod==7)
 			{
 				mp.repaint();
 				break;
 			}
+			else if(mod==8)
+			{
+				tm.findTheAbleCard(mod, ifsave_mod);
+				if(ifsave_mod==0)
+				{
+			 	  Card temp;
+				  if(this.current_robot!=null)
+				 {		 
+					if((temp=this.current_robot.ifSave(save_aim))!=null)
+					{
+						mp.jt.append(current_robot.getname()+"给"+save_aim.getname()+"用了云南白药\n");
+						mp.jt.setCaretPosition(mp.jt.getText().length());
+						  Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
+					      m.setObj(temp);
+					      tm.getMap_middle().add(m);
+					      save_aim.liferise();
+					      mod=mod_last;
+					      if(role_last!=tm.getCurrentUser())
+					      current_robot=(Robot)role_last;
+					      else 
+					      current_robot=null;
+					}
+					else
+					{
+						Role role_temp=tm.getRobot(current_robot);
+						if(role_temp==role_last)
+						{//no one save the needed-saving one
+							mod=mod_last;
+							if(role_last!=tm.getCurrentUser())
+							current_robot=(Robot)role_last;
+							else
+							current_robot=null;
+							someOneDie();
+						}
+						if(role_temp==tm.getCurrentUser())
+						{
+							current_robot=null;
+						} 
+						else
+						{
+							current_robot=(Robot)role_temp;
+						}
+					  }
+				   }
+				  else
+				  {
+						ifsave_mod=1;
+						mp.b_cancel.setEnabled(true);
+				   }
+				  }
+				}
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
@@ -231,5 +307,37 @@ public class GameMainThread  implements Runnable{
 	public Role getShootAim()
 	{
 		return shoot_aim;
+	}
+	public void someOneDie()
+	{
+		Vector<Mapping> m=save_aim.die();
+		tm.redistributeId();
+		 mp.jt.append(save_aim.getname()+"挂了\n");
+		 mp.jt.setCaretPosition(mp.jt.getText().length());
+		 boolean if_over=true;
+	    for(int i=0;i<m.size();i++)
+	    {
+	    	tm.getMap_middle().add(m.get(i));
+	    }
+	    if(save_aim==tm.getCurrentUser())
+	    {
+	    	if_win=false;
+	    	mod=7;
+	    	return;
+	    }
+	    for(int i=0;i<tm.getMap_role().size();i++)
+	    {
+	    	Role role_temp=(Role)tm.getMap_role().get(i).getobj();
+	    	if(role_temp.getIdentity()==3||role_temp.getIdentity()==4)
+	    	{
+	    		if_over=if_over&&(!role_temp.ifAlive());
+	    	}
+	    }
+	    if(if_over)
+	    {
+	    	mod=7;
+	    	if_win=true;
+	    	return;
+	    }
 	}
 }
