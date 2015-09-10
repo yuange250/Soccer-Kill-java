@@ -174,6 +174,7 @@ public class Robot extends Role{
 	        		   }
 	        		   else if(this.getIdentity()==2)
 	        		   {
+	        			   System.out.println("such"+j+" "+enemyIdentities[0]+" "+enemyIdentities[1]+" "+enemyIdentities[2]+" "+enemyIdentities[3]+" "+enemyIdentities[4]);
 	        			   if(ZhongchenGetAim(j))
 	        			   {
 	        				   return map_role.get(j);
@@ -216,15 +217,15 @@ public class Robot extends Role{
 	{
 		if(aim.getIdentity()==1&&current_role.getId()!=this.getId())
 		{
-			enemyIdentities[current_role.getId()]=3;
+			enemyIdentities[current_role.getPosition()]=3;
 		}
 		if(aim.getIdentity()==2&&current_role.getId()!=this.getId())
 		{
-			enemyIdentities[current_role.getId()]=3;
+			enemyIdentities[current_role.getPosition()]=3;
 		}
 		else if(aim.getIdentity()==3&&current_role.getId()!=this.getId())
 		{
-			enemyIdentities[current_role.getId()]=2;
+			enemyIdentities[current_role.getPosition()]=2;
 		}
 	}
 }

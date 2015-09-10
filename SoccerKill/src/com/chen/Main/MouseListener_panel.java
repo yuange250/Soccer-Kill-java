@@ -87,7 +87,7 @@ public class MouseListener_panel implements MouseListener{
 	          {//select a shoot and select a role
 	        	  mp.shoot_aim=(Role)temp.getobj();
 	        	  int distance=mp.shoot_aim.getId()-mp.tm.getCurrentUser().getId();
-	        	  if(distance>=3)
+	        	  if(distance>=(mp.tm.getTotalRolenum()+1)/2)
 	        		  distance=mp.tm.getTotalRolenum()-distance;
 	        	  if(distance<=mp.tm.getCurrentUser().getattackdistance()&&mp.shoot_aim!=mp.tm.getCurrentUser())
 	        	  {

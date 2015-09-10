@@ -180,6 +180,7 @@ public class GameMainThread  implements Runnable{
 					}
 					else
 					{//the role use a card that others can not disturb
+						mp.jt.append(current_robot.getname()+"用了一张云南白药\n");
 						Mapping m=new Mapping(150+tm.getMap_middle().size()*100,250,150,100);
 						m.setObj(temp);
 						tm.getMap_middle().add(m);

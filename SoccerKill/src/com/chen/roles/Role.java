@@ -15,12 +15,18 @@ public class Role {
 	protected String name;
 	protected int shoot_time;
 	private int Id;
+	protected int position;
 	protected int attackdistance;
 	protected int identity;//1 for zhugong 2 for zhongchen 3 for fanzie 4 for neijian
 	public Role(int Id,int identity)
 	{
 		this.Id=Id;
+		this.position=Id;
 		this.identity=identity;
+	}
+	public int getPosition()
+	{
+		return this.position;
 	}
 	public boolean ifAlive()
 	{

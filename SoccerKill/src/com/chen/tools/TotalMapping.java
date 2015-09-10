@@ -271,7 +271,7 @@ public class TotalMapping implements Runnable{
 		  {
 			  Role role_temp=(Role)map_role.get(i).getobj();
       	      int distance=role_temp.getId()-current_role.getId();
-      	      if(distance>=3)
+      	      if(distance>=(getTotalRolenum()+1)/2)
       		     distance=this.getTotalRolenum()-distance;
       	     if(distance<=current_role.getattackdistance()&&role_temp!=current_role)
       	     {
