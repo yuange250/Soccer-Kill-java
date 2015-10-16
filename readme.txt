@@ -1,5 +1,5 @@
 This is game based on a popular table-game sanguo_kill.
-I change the roles in the game to some famous player,and the rules of this game is the same as sanguo-kill.
+I change the roles in the game to some famous soccer player,and the rules of this game is the same as sanguo-kill.
 
 programming daily:
 8-24:
@@ -39,3 +39,6 @@ programming daily:
 实现上面几个功能,
 同时加上了判断功能也就是,比如回合内只能用射和药,于是挡就用灰色遮住
 选择了射之后会将不再攻击范围内的人用灰色挡住.
+
+9-15:
+好吧，我决定看完Thinking in Java之后再写，看过书之后才发现，自己的Java实在是被高估了
